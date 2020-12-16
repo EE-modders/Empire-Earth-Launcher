@@ -1,6 +1,6 @@
 # Empire Earth Launcher
 
-A launcher Empire Earth 1, simple and complete.\
+A launcher for Empire Earth 1, simple and complete.\
 Coded in C# with the .NET Framework 2
 
 ![image](https://github.com/EE-modders/Empire-Earth-Launcher/ui_demo.png)

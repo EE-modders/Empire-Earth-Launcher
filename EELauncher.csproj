@@ -101,6 +101,7 @@
     <Compile Include="CustomizeLobbyForm.Designer.cs">
       <DependentUpon>CustomizeLobbyForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="FileDownloadHelper.cs" />
     <Compile Include="Utils\CheckSumHelper.cs" />
     <Compile Include="Utils\Crc32.cs" />
     <Compile Include="Game\GameDownloadHelper.cs" />
