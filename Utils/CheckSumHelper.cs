@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 
 namespace EELauncher
@@ -18,9 +19,7 @@ namespace EELauncher
 
 
             if (!new FileInfo(path).Exists)
-            {
                 return false;
-            }
 
             try
             {
@@ -34,7 +33,10 @@ namespace EELauncher
 
                 using (WebClient webClient = new WebClient())
                 {
-                    hashOnline = webClient.DownloadString(url).ToLower();
+                    hashOnline = webClient.DownloadString(
+                        url.Replace("https:", "http:").
+                        Replace(Path.GetFileName(path), 
+                        Path.GetFileNameWithoutExtension(path) + ".crc32")).ToLower();
                 }
 
             }
