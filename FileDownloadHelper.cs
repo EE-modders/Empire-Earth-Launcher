@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -14,24 +13,24 @@ namespace EELauncher
     {
         private Stopwatch sw = new Stopwatch();
 
+        object syncObject = new object();
+
         private Dictionary<string, string> localDownloadList = new Dictionary<string, string>();
         private List<Uri> downloadLinkList = null;
         private int downloadListIndex = 0;
 
+        private string currentFileName = null;
+
         private Label label;
         private ProgressBar progressBar;
-
-
-        // Dirty var
-        private bool currentCheckSum = false;
-        private string currentUrl = null;
-        private string currentPath = null;
+        private SynchronizationContext synchronizationContextUI;
 
         // This Class is to Download File Asy with UI
-        public FileDownloadHelper(Label label, ProgressBar progressBar)
+        public FileDownloadHelper(Label label, ProgressBar progressBar, SynchronizationContext synchronizationContextUI)
         {
             this.label = label;
             this.progressBar = progressBar;
+            this.synchronizationContextUI = synchronizationContextUI;
         }
 
         public void DownloadOneFile(string url, string path)
@@ -43,54 +42,56 @@ namespace EELauncher
                 webClient.DownloadFileCompleted += new AsyncCompletedEventHandler(Completed);
                 webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(ProgressChanged);
 
-                progressBar.Value = 0;
-                progressBar.Style = ProgressBarStyle.Marquee;
-                progressBar.Visible = true;
-                label.Text = "Checking File Integrity...";
-                label.Visible = true;
+                synchronizationContextUI.Post(new SendOrPostCallback((o) =>
+                {
+                    progressBar.Value = 0;
+                    progressBar.Style = ProgressBarStyle.Marquee;
+                    progressBar.Visible = true;
+                }), null);
+
+                synchronizationContextUI.Post(new SendOrPostCallback((o) =>
+                {
+                    label.Text = "Checking File Integrity...";
+                    label.Visible = true;
+                }), null);
+
                 sw.Start();
 
-                BackgroundWorker installBackgroundWorker = new BackgroundWorker();
-                installBackgroundWorker.DoWork += CheckSumWork;
-                installBackgroundWorker.RunWorkerCompleted += CheckSumWorkComplete;
+                bool currentCheckSum = CheckSumHelper.CheckFromFileAndURL(CheckSumHelper.CheckSumAlgo.CRC, path, url);
 
-                try
+                if (!currentCheckSum)
                 {
-                    currentUrl = url;
-                    currentPath = path;
-                    installBackgroundWorker.RunWorkerAsync(webClient);
+                    if (File.Exists(path))
+                    {
+                        File.Delete(path);
+                    }
+
+                    if (!new FileInfo(path).Directory.Exists)
+                    {
+                        new FileInfo(path).Directory.Create();
+                    }
+
+                    synchronizationContextUI.Post(new SendOrPostCallback((o) =>
+                    {
+                        progressBar.Style = ProgressBarStyle.Blocks;
+                    }), null);
+
+
+                    lock (syncObject)
+                    {
+                        currentFileName = Path.GetFileName(path);
+                        Console.WriteLine("Downloading " + currentFileName + " [" + url + "]");
+                        webClient.DownloadFileAsync(new Uri(url), path);
+                        //This would block the thread until download completes
+                        Monitor.Wait(syncObject);
+                    }
+
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show("Unnable to download : " + "N/A"
-                            + "Error : " + ex.Message, "Download Error !");
+                    Completed(null, null);
                 }
             }
-        }
-
-        private void CheckSumWorkComplete(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (!currentCheckSum)
-            {
-                if (File.Exists(currentPath))
-                    File.Delete(currentPath);
-
-                if (!new FileInfo(currentPath).Directory.Exists)
-                    new FileInfo(currentPath).Directory.Create();
-
-                progressBar.Style = ProgressBarStyle.Blocks;
-                ((WebClient)e.Result).DownloadFileAsync(new Uri(currentUrl), currentPath);
-            }
-            else
-            {
-                Completed(null, null);
-            }
-        }
-
-        private void CheckSumWork(object sender, DoWorkEventArgs e)
-        {
-            currentCheckSum = CheckSumHelper.CheckFromFileAndURL(CheckSumHelper.CheckSumAlgo.CRC, currentPath, currentUrl);
-            e.Result = e.Argument;
         }
 
         public void DownloadFromList(Dictionary<string, string> downloadList)
@@ -100,30 +101,55 @@ namespace EELauncher
             downloadListIndex = 0;
 
             foreach (string keyCollection in localDownloadList.Keys)
+            {
                 downloadLinkList.Add(new Uri(keyCollection.Replace("https:", "http:")));
+            }
 
             DownloadOneFile(downloadLinkList[downloadListIndex].AbsoluteUri,
                      localDownloadList[downloadLinkList[downloadListIndex].AbsoluteUri]);
 
         }
 
+        private DateTime wanted_ui_time = DateTime.Now;
         private void ProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            label.Text = string.Format("{0} MB/s  |  {1} %  ({2}/{3} MB)",
-                (e.BytesReceived / 1024d / 1024d / sw.Elapsed.TotalSeconds).ToString("0.00"),
-                e.ProgressPercentage.ToString(),
-                (e.BytesReceived / 1024d / 1024d).ToString("0.00"),
-                (e.TotalBytesToReceive / 1024d / 1024d).ToString("0.00"));
+            if (DateTime.Now >= wanted_ui_time)
+            {
+                synchronizationContextUI.Post(new SendOrPostCallback((o) =>
+                {
+                    label.Text = string.Format(currentFileName + "  |  {0} MB/s  |  {1} %  ({2}/{3} MB)",
+                   (e.BytesReceived / 1024d / 1024d / sw.Elapsed.TotalSeconds).ToString("0.00"),
+                   e.ProgressPercentage.ToString(),
+                   (e.BytesReceived / 1024d / 1024d).ToString("0.00"),
+                   (e.TotalBytesToReceive / 1024d / 1024d).ToString("0.00"));
+                }), null);
 
-            progressBar.Value = e.ProgressPercentage;
+                synchronizationContextUI.Post(new SendOrPostCallback((o) =>
+                {
+                    progressBar.Value = e.ProgressPercentage;
+                }), null);
+
+                wanted_ui_time = DateTime.Now.AddMilliseconds(25);
+            }
 
         }
 
         private void Completed(object sender, AsyncCompletedEventArgs e)
         {
-            progressBar.Visible = false;
-            progressBar.Value = 0;
-            label.Visible = false;
+            // Progress Bar
+            synchronizationContextUI.Post(new SendOrPostCallback((o) =>
+            {
+                progressBar.Visible = false;
+                progressBar.Value = 0;
+            }), null);
+
+            // Label
+            synchronizationContextUI.Post(new SendOrPostCallback((o) =>
+            {
+                label.Visible = false;
+                label.Text = "";
+            }), null);
+
             sw.Reset();
 
             // Check more download to do
@@ -134,6 +160,20 @@ namespace EELauncher
                     downloadListIndex++;
                     DownloadOneFile(downloadLinkList[downloadListIndex].AbsoluteUri,
                         localDownloadList[downloadLinkList[downloadListIndex].AbsoluteUri]);
+                }
+                else
+                {
+                    lock (syncObject)
+                    {
+                        Monitor.PulseAll(syncObject);
+                    }
+                }
+            }
+            else
+            {
+                lock (syncObject)
+                {
+                    Monitor.PulseAll(syncObject);
                 }
             }
         }

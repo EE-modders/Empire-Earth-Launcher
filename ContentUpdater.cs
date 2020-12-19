@@ -1,68 +1,113 @@
-﻿using System.IO;
-using System.Net;
+﻿using System;
+using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace EELauncher
 {
     class ContentUpdater
     {
-        private GameHelper gameHelper;
-        private int retry_remaining = 5;
-        public ContentUpdater(GameHelper gameHelper)
+
+        enum GameContent
         {
-            this.gameHelper = gameHelper;
+            Lang, Intro, Data
         }
 
+        private GameHelper gameHelper;
+
+        private Label label;
+        private ProgressBar progressBar;
+        private SynchronizationContext synchronizationContextUI;
+
+        public ContentUpdater(GameHelper gameHelper, Label label, ProgressBar progressBar, SynchronizationContext synchronizationContextUI)
+        {
+            this.gameHelper = gameHelper;
+            this.label = label;
+            this.progressBar = progressBar;
+            this.synchronizationContextUI = synchronizationContextUI;
+        }
+
+        // Download lang.dll
         public void UpdateLang(string lang)
         {
-            if (!Directory.Exists("./Languages/" + lang))
+            // Copy from repo to game folder if needed
+            bool langRemote = CheckSumHelper.CheckFromFileAndURL(CheckSumHelper.CheckSumAlgo.CRC,
+                gameHelper.GetInstallFolder().FullName + @"\Language.dll",
+                "http://storage.empireearth.eu/EE/Languages/" + lang + "/Language.dll");
+
+            if (!langRemote)
             {
-                Directory.CreateDirectory("./Languages/" + lang);
+                new FileDownloadHelper(label, progressBar, synchronizationContextUI).DownloadOneFile("http://storage.empireearth.eu/EE/Languages/" + lang + "/Language.dll",
+                    "./Languages/" + lang + "/Language.dll");
             }
 
-            // Check local repo
-            if (!CheckSumHelper.CheckFromFileAndURL(CheckSumHelper.CheckSumAlgo.CRC, "./Languages/" + lang + "/Language.dll",
-                "http://storage.empireearth.eu/" + gameHelper.GetGameType().ToString().ToUpper() + "/Languages/" + lang + "/Language.crc32"))
+            string langProgram = CheckSumHelper.GetFromFile(CheckSumHelper.CheckSumAlgo.CRC, gameHelper.GetInstallFolder().FullName + @"\Language.dll");
+            string langLocal = CheckSumHelper.GetFromFile(CheckSumHelper.CheckSumAlgo.CRC, "./Languages/" + lang + "/Language.dll");
+
+            if (!langLocal.Equals(langProgram))
             {
-                new WebClient().DownloadFile("http://storage.empireearth.eu/EE/Languages/" + lang + "/Language.dll", "./Languages/" + lang + "/Language.dll");
-
-                // ReCheck CRC-32 & Retry if possible
-                if (!CheckSumHelper.CheckFromFileAndURL(CheckSumHelper.CheckSumAlgo.CRC, "./Languages/" + lang + "/Language.dll",
-                "http://storage.empireearth.eu/" + gameHelper.GetGameType().ToString().ToUpper() + "/Languages/" + lang + "/Language.crc32"))
-                {
-                    if (CheckAndRegisterRetry())
-                    {
-                        UpdateLang(lang);
-                    }
-                    else
-                    {
-                        return;
-                    }
-                }
+                File.Copy("./Languages/" + lang + "/Language.dll", gameHelper.GetInstallFolder().FullName + @"/Language.dll", true);
             }
+        }
 
+        // Only copy from local repo to game
+        public void UpdateLangOffline(string lang)
+        {
             // Copy from repo to game folder if needed
             string langProgram = CheckSumHelper.GetFromFile(CheckSumHelper.CheckSumAlgo.CRC, gameHelper.GetInstallFolder().FullName + @"\Language.dll");
             string langLocal = CheckSumHelper.GetFromFile(CheckSumHelper.CheckSumAlgo.CRC, "./Languages/" + lang + "/Language.dll");
             if (!langLocal.Equals(langProgram))
             {
-                File.Copy("./Languages/" + lang + "/Language.dll", gameHelper.GetInstallFolder().FullName + @"Language.dll", true);
+                File.Copy("./Languages/" + lang + "/Language.dll", gameHelper.GetInstallFolder().FullName + @"/Language.dll", true);
             }
         }
 
-        private bool CheckAndRegisterRetry()
+        // Download EE.bik
+        public void UpdateIntro(bool skipIntro, string lang)
         {
-            if (retry_remaining <= 0)
+            DirectoryInfo moviesDirectoryInfo = new DirectoryInfo(gameHelper.GetInstallFolder().FullName + @"\Data\Movies");
+            DirectoryInfo moviesDisabledDirectoryInfo = new DirectoryInfo(gameHelper.GetInstallFolder().FullName + @"\Data\Movies_");
+            try
             {
-                MessageBox.Show("Too many error while checking update !\n" +
-                    "Maybe an server side problem or your launcher isn't up-to-date !\n" +
-                    "Sorry for the problem !");
-                return false;
+                if (skipIntro)
+                {
+                    if (moviesDirectoryInfo.Exists)
+                    {
+                        moviesDirectoryInfo.MoveTo(moviesDisabledDirectoryInfo.FullName);
+                    }
+                }
+                else
+                {
+                    if (moviesDisabledDirectoryInfo.Exists)
+                    {
+                        moviesDisabledDirectoryInfo.MoveTo(moviesDirectoryInfo.FullName);
+                    }
+
+                    new FileDownloadHelper(label, progressBar, synchronizationContextUI)
+                        .DownloadOneFile("http://storage.empireearth.eu/EE/Languages/" + lang + "/Data/Movies/Empire%20Earth.bik",
+                        gameHelper.GetInstallFolder().FullName + @"Data\Movies\Empire Earth.bik");
+
+
+                }
             }
-            else
+            catch (Exception ex)
             {
-                retry_remaining--;
-                return true;
+                MessageBox.Show("Unnable to rename Movies folder !\nIs the game already running ?\n Error : " + ex.Message);
+            }
+        }
+
+        public void UpdateData(string lang)
+        {
+            new FileDownloadHelper(label, progressBar, synchronizationContextUI)
+                .DownloadOneFile("http://storage.empireearth.eu/EE/Languages/" + lang + "/Data/data.ssa",
+                    gameHelper.GetInstallFolder().FullName + "/Data/data.ssa");
+        }
+
+        public void UpdateDrex(bool enabled)
+        {
+            if (enabled)
+            {
+
             }
         }
 

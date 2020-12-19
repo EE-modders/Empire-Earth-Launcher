@@ -34,7 +34,6 @@ namespace EELauncher
         {
             using (WebClient webClient = new WebClient())
             {
-                webClient.Credentials = CredentialCache.DefaultCredentials;
                 webClient.DownloadFileCompleted += new AsyncCompletedEventHandler(Completed);
                 webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(ProgressChanged);
 
@@ -59,15 +58,20 @@ namespace EELauncher
             }
         }
 
+        private DateTime wanted_ui_time = DateTime.Now;
         private void ProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            label.Text = string.Format("{0} MB/s  |  {1} %  ({2}/{3} MB)",
-                (e.BytesReceived / 1024d / 1024d / sw.Elapsed.TotalSeconds).ToString("0.00"),
-                e.ProgressPercentage.ToString(),
-                (e.BytesReceived / 1024d / 1024d).ToString("0.00"),
-                (e.TotalBytesToReceive / 1024d / 1024d).ToString("0.00"));
+            if (DateTime.Now >= wanted_ui_time)
+            {
+                label.Text = string.Format("{0} MB/s  |  {1} %  ({2}/{3} MB)",
+                    (e.BytesReceived / 1024d / 1024d / sw.Elapsed.TotalSeconds).ToString("0.00"),
+                    e.ProgressPercentage.ToString(),
+                    (e.BytesReceived / 1024d / 1024d).ToString("0.00"),
+                    (e.TotalBytesToReceive / 1024d / 1024d).ToString("0.00"));
 
-            progressBar.Value = e.ProgressPercentage;
+                progressBar.Value = e.ProgressPercentage;
+                wanted_ui_time = DateTime.Now.AddMilliseconds(25);
+            }
 
         }
 

@@ -24,26 +24,33 @@ namespace EELauncher
             try
             {
                 using (FileStream fs = File.Open(new FileInfo(path).FullName, FileMode.Open))
-                {
                     foreach (byte b in crc32.ComputeHash(fs))
-                    {
                         hashLocal += b.ToString("x2").ToLower();
-                    }
-                }
-
-                using (WebClient webClient = new WebClient())
-                {
-                    hashOnline = webClient.DownloadString(
-                        url.Replace("https:", "http:").
-                        Replace(Path.GetFileName(path), 
-                        Path.GetFileNameWithoutExtension(path) + ".crc32")).ToLower();
-                }
-
             }
             catch
             {
                 return false;
             }
+
+            try
+            {
+                using (WebClient webClient = new WebClient())
+                {
+                    hashOnline = webClient.DownloadString(
+                        url.Replace("https:", "http:").
+                        Replace(Path.GetFileName(path).Replace(" ", "%20"),
+                        Path.GetFileNameWithoutExtension(path).Replace(" ", "%20") + ".crc32")).ToLower();
+                }
+            }
+            catch
+            {
+                Console.WriteLine("CheckSum Fail For " + url.Replace("https:", "http:").
+                        Replace(Path.GetFileName(path).Replace(" ", "%20"),
+                        Path.GetFileNameWithoutExtension(path).Replace(" ", "%20") + ".crc32"));
+                return false;
+            }
+
+            Console.WriteLine(Path.GetFileName(path) + " | " + hashLocal + " (local) | (online) " + hashOnline);
 
             if (hashLocal.Equals(hashOnline) &&
                 !string.IsNullOrEmpty(hashLocal) &&
