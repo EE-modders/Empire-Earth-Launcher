@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace EELauncher
@@ -21,6 +23,12 @@ namespace EELauncher
             oldHardwareCheckBox.Checked = Utils.isWindowsOld();
             dgVoodooComboBox.Enabled = Utils.dgVoodooSupport();
 
+            if (drexCheckBox.Checked == false)
+            {
+                menuComboBox.Enabled = false;
+            }
+
+            new LanguagesHelper(null).OfflinePop(langComboBox);
             RemoteData();
         }
 
@@ -82,15 +90,15 @@ namespace EELauncher
                 + "dgVoodoo Support = " + Utils.dgVoodooSupport() + "\n"
                 + "Old Hardware (DLL) = " + Utils.isWindowsOld() + " (overwriteable)\n"
                 + "Discord Support = " + Utils.discordSupport() + "\n"
-                + "NeoEE EE = " + new GameHelper(GameHelper.GameType.EE, GameHelper.GameProvider.Neo).IsInstalled() + "\n"
+                + "NeoEE EE = " + new GameHelper(GameHelper.GameType.EE, GameHelper.GameProvider.Neo).IsInstalled()
                 );
         }
 
         private void playButton_Click(object sender, EventArgs e)
         {
             if (langComboBox.SelectedIndex == -1 ||
-                menuComboBox.SelectedIndex == -1 ||
-                dgVoodooComboBox.SelectedIndex == -1)
+                dgVoodooComboBox.SelectedIndex == -1 || (drexCheckBox.Checked &&
+                menuComboBox.SelectedIndex == -1))
             {
                 MessageBox.Show("Please fill all ComboBox to start the game...", "Dude...");
                 return;
@@ -102,27 +110,62 @@ namespace EELauncher
             {
                 if (storage_online)
                 {
-                    progressBar.Visible = true;
-                    progressBar.Style = ProgressBarStyle.Marquee;
-                    progressBar.Value = 100;
-
                     if (!Utils.IsCurrentExecAdmin() && gameHelper.NeedAdmin())
                     {
-                        MessageBox.Show("Game is installed as Admin but Launcher is running as user...\n\n" +
+                        MessageBox.Show("Game is installed as Admin but Launcher is running as User...\n" +
                             "Restarting Launcher as Admin...", "Not Admin !", MessageBoxButtons.OK);
                         Utils.RestartAsAdmin();
                     }
 
-                    new ContentUpdater(gameHelper).UpdateLang(langComboBox.Text);
+                    string lang = langComboBox.Text;
+                    bool skipIntro = skipIntrocheckBox.Checked;
+                    bool fullGame = fullGameCheckBox.Checked;
+                    bool dreXmod = drexCheckBox.Checked;
 
-                    progressBar.Visible = false;
-                    progressBar.Style = ProgressBarStyle.Blocks;
-                    progressBar.Value = 0;
+                    SynchronizationContext uiSynch = SynchronizationContext.Current;
+
+                    BackgroundWorker backgroundWorker = new BackgroundWorker();
+                    backgroundWorker.DoWork += delegate (object send, DoWorkEventArgs eve)
+                    {
+                        ContentUpdater contentUpdater = new ContentUpdater(gameHelper, downloadLabel, progressBar, uiSynch);
+                        contentUpdater.UpdateLang(lang);
+
+                        if (fullGame)
+                        {
+                            contentUpdater.UpdateIntro(skipIntro, lang);
+                            contentUpdater.UpdateData(lang);
+                        }
+                    };
+
+                    backgroundWorker.RunWorkerCompleted += delegate (object send, RunWorkerCompletedEventArgs eve)
+                    {
+                        MessageBox.Show("AFTER UPDATE");
+                        gameHelper.Start();
+                    };
+
+                    backgroundWorker.RunWorkerAsync();
+
                 }
                 else
                 {
+                    string lang = langComboBox.Text;
+                    bool skipIntro = skipIntrocheckBox.Checked;
+                    SynchronizationContext uiSynch = SynchronizationContext.Current;
+
+                    BackgroundWorker backgroundWorker = new BackgroundWorker();
+                    backgroundWorker.DoWork += delegate (object send, DoWorkEventArgs eve)
+                    {
+                        ContentUpdater contentUpdater = new ContentUpdater(gameHelper, downloadLabel, progressBar, uiSynch);
+                        contentUpdater.UpdateLangOffline(lang);
+                    };
+
+                    backgroundWorker.RunWorkerCompleted += delegate (object send, RunWorkerCompletedEventArgs eve)
+                    {
+                        MessageBox.Show("AFTER UPDATE OFFLINE");
+                    };
+
                     MessageBox.Show("Game is starting, but storage server are offline !\n" +
-                        "The game can't be updated or verified...", "Storage Server Offline !");
+                        "The game can't be updated or verified...\nOnly some EE Launcher feature will work...", "Storage Server Offline !");
                 }
             }
             else
@@ -155,6 +198,41 @@ namespace EELauncher
         private void customizeLobbyButton_Click(object sender, EventArgs e)
         {
             new CustomizeLobbyForm(new GameHelper(GameHelper.GameType.EE, GameHelper.GameProvider.Neo)).ShowDialog();
+        }
+
+        private void drexCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            menuComboBox.Enabled = drexCheckBox.Checked;
+        }
+
+        private void ShowHelp(string message)
+        {
+            MessageBox.Show(message, "Help", MessageBoxButtons.OK, MessageBoxIcon.Question);
+        }
+
+        private void langHelpLabel_Click(object sender, EventArgs e)
+        {
+            ShowHelp("Allows you to change the display language of the game, and the rest of the content if you also use the 'Full Game' option." +
+                "\n\nSome languages may not work on your computer because their format requires Windows to be installed with the language selected." +
+                "\nYou should still be able to display the language you want by changing the Region settings in the control panel under " +
+                "'Language for non-unicode programs', also on the latest version of Windows 10 an option allows you to support all formats (UTF-8) " +
+                "allowing you to play with all languages.");
+        }
+
+        private void menuHelpLabel_Click(object sender, EventArgs e)
+        {
+            ShowHelp("This is the menu resolution (so not the game resolution), to use it you have to enable dreXmod.");
+        }
+
+        private void dgVoodooHelpLabel_Click(object sender, EventArgs e)
+        {
+            ShowHelp("dgVoodoo is a library that converts old display instructions into modern display instructions.This solves a lot of problems in " +
+                "the vast majority of cases." +
+                "\n\nNVIDIA: Usually not necessary, but can fix problems." +
+                "\nAMD: Can fix problems and improve performance" +
+                "\nIntel: Can triple performance and fix problems" +
+                "\n\nHowever, if your game is already running very well this option is not recommended because it can sometimes create annoying " +
+                "slowdowns (especially when you use the in game interface...We do not know why...)");
         }
     }
 }

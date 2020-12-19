@@ -67,7 +67,8 @@ namespace EELauncher
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.oldHardwareCheckBox = new System.Windows.Forms.CheckBox();
             this.skipIntrocheckBox = new System.Windows.Forms.CheckBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.fullGameCheckBox = new System.Windows.Forms.CheckBox();
+            this.langHelpLabel = new System.Windows.Forms.Label();
             this.energyGroupBox.SuspendLayout();
             this.neoGroupBox.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -98,9 +99,9 @@ namespace EELauncher
             // 
             this.downloadLabel.BackColor = System.Drawing.Color.Transparent;
             this.downloadLabel.ForeColor = System.Drawing.Color.White;
-            this.downloadLabel.Location = new System.Drawing.Point(304, 284);
+            this.downloadLabel.Location = new System.Drawing.Point(276, 284);
             this.downloadLabel.Name = "downloadLabel";
-            this.downloadLabel.Size = new System.Drawing.Size(253, 13);
+            this.downloadLabel.Size = new System.Drawing.Size(281, 13);
             this.downloadLabel.TabIndex = 10;
             this.downloadLabel.Text = "Download useless files...";
             this.downloadLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -140,6 +141,7 @@ namespace EELauncher
             this.drexCheckBox.TabIndex = 3;
             this.drexCheckBox.Text = "dreXmod";
             this.drexCheckBox.UseVisualStyleBackColor = false;
+            this.drexCheckBox.CheckedChanged += new System.EventHandler(this.drexCheckBox_CheckedChanged);
             // 
             // neoCheckBox
             // 
@@ -242,6 +244,7 @@ namespace EELauncher
             this.energyGroupBox.Controls.Add(this.button5);
             this.energyGroupBox.Controls.Add(this.individualSetupbutton);
             this.energyGroupBox.Controls.Add(this.customizeLobbyButton);
+            this.energyGroupBox.Enabled = false;
             this.energyGroupBox.ForeColor = System.Drawing.Color.Khaki;
             this.energyGroupBox.Location = new System.Drawing.Point(276, 134);
             this.energyGroupBox.Name = "energyGroupBox";
@@ -388,8 +391,9 @@ namespace EELauncher
             this.menuComboBox.ForeColor = System.Drawing.Color.Khaki;
             this.menuComboBox.FormattingEnabled = true;
             this.menuComboBox.Items.AddRange(new object[] {
-            "16:9",
-            "Old 4:3"});
+            "Disabled 4:3 (800x400)",
+            "16:9 (1920x1080)",
+            "16:9 (1280x720)"});
             this.menuComboBox.Location = new System.Drawing.Point(98, 172);
             this.menuComboBox.Name = "menuComboBox";
             this.menuComboBox.Size = new System.Drawing.Size(137, 21);
@@ -406,6 +410,7 @@ namespace EELauncher
             this.menuHelpLabel.Size = new System.Drawing.Size(13, 13);
             this.menuHelpLabel.TabIndex = 18;
             this.menuHelpLabel.Text = "?";
+            this.menuHelpLabel.Click += new System.EventHandler(this.menuHelpLabel_Click);
             // 
             // dgVoodooHelpLabel
             // 
@@ -418,6 +423,7 @@ namespace EELauncher
             this.dgVoodooHelpLabel.Size = new System.Drawing.Size(13, 13);
             this.dgVoodooHelpLabel.TabIndex = 19;
             this.dgVoodooHelpLabel.Text = "?";
+            this.dgVoodooHelpLabel.Click += new System.EventHandler(this.dgVoodooHelpLabel_Click);
             // 
             // versionLabel
             // 
@@ -539,17 +545,30 @@ namespace EELauncher
             this.skipIntrocheckBox.Text = "Skip Intro";
             this.skipIntrocheckBox.UseVisualStyleBackColor = false;
             // 
-            // checkBox1
+            // fullGameCheckBox
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.BackColor = System.Drawing.Color.Transparent;
-            this.checkBox1.ForeColor = System.Drawing.Color.Khaki;
-            this.checkBox1.Location = new System.Drawing.Point(39, 259);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(190, 17);
-            this.checkBox1.TabIndex = 34;
-            this.checkBox1.Text = "Full Game (Voices and Campaigns)";
-            this.checkBox1.UseVisualStyleBackColor = false;
+            this.fullGameCheckBox.AutoSize = true;
+            this.fullGameCheckBox.BackColor = System.Drawing.Color.Transparent;
+            this.fullGameCheckBox.ForeColor = System.Drawing.Color.Khaki;
+            this.fullGameCheckBox.Location = new System.Drawing.Point(39, 259);
+            this.fullGameCheckBox.Name = "fullGameCheckBox";
+            this.fullGameCheckBox.Size = new System.Drawing.Size(190, 17);
+            this.fullGameCheckBox.TabIndex = 34;
+            this.fullGameCheckBox.Text = "Full Game (Voices and Campaigns)";
+            this.fullGameCheckBox.UseVisualStyleBackColor = false;
+            // 
+            // langHelpLabel
+            // 
+            this.langHelpLabel.AutoSize = true;
+            this.langHelpLabel.BackColor = System.Drawing.Color.Transparent;
+            this.langHelpLabel.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.langHelpLabel.ForeColor = System.Drawing.Color.Goldenrod;
+            this.langHelpLabel.Location = new System.Drawing.Point(241, 149);
+            this.langHelpLabel.Name = "langHelpLabel";
+            this.langHelpLabel.Size = new System.Drawing.Size(13, 13);
+            this.langHelpLabel.TabIndex = 35;
+            this.langHelpLabel.Text = "?";
+            this.langHelpLabel.Click += new System.EventHandler(this.langHelpLabel_Click);
             // 
             // LauncherForm
             // 
@@ -559,7 +578,8 @@ namespace EELauncher
             this.BackgroundImage = global::EELauncher.Properties.Resources.launcher_image1;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ClientSize = new System.Drawing.Size(588, 378);
-            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.langHelpLabel);
+            this.Controls.Add(this.fullGameCheckBox);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.neoServerConLabel);
             this.Controls.Add(this.energyServerConLabel);
@@ -643,7 +663,8 @@ namespace EELauncher
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox oldHardwareCheckBox;
         private System.Windows.Forms.CheckBox skipIntrocheckBox;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox fullGameCheckBox;
+        private System.Windows.Forms.Label langHelpLabel;
     }
 }
 
