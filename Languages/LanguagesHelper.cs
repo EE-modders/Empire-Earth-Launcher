@@ -26,6 +26,46 @@ namespace EELauncher
             connectionBackgroundWorker.RunWorkerAsync();
         }
 
+        public void OfflinePop(ComboBox comboBox)
+        {
+            this.comboBox = comboBox;
+            DirectoryInfo languagesDirectoryInfo = new DirectoryInfo("./Languages");
+            List<string> localdata = new List<string>();
+
+            // Local Pop
+            if (!languagesDirectoryInfo.Exists)
+            {
+                languagesDirectoryInfo.Create();
+            }
+
+            foreach (DirectoryInfo fileInfo in languagesDirectoryInfo.GetDirectories())
+            {
+                localdata.Add(fileInfo.Name);
+            }
+
+            string result = string.Empty;
+            if (localdata.Count > 1)
+            {
+                result = string.Join(",", localdata.ToArray());
+            }
+            else if (localdata.Count == 1)
+            {
+                result = localdata[0];
+            }
+
+            if (!string.IsNullOrEmpty(result))
+            {
+                string[] langs = result.Split(new char[] { ',' });
+                foreach (string lang in langs)
+                {
+                    if (!comboBox.Items.Contains(lang))
+                    {
+                        comboBox.Items.Add(lang);
+                    }
+                }
+            }
+        }
+
         private void LanguagesHelperBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             // Online Pop
@@ -44,39 +84,14 @@ namespace EELauncher
 
         private void LanguagesHelperBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            DirectoryInfo languagesDirectoryInfo = new DirectoryInfo("./Languages");
-            List<string> localdata = new List<string>();
-
-            // Local Pop
-            if (!languagesDirectoryInfo.Exists)
-            {
-                languagesDirectoryInfo.Create();
-            }
-
-            foreach (DirectoryInfo fileInfo in languagesDirectoryInfo.GetDirectories())
-            {
-                localdata.Add(fileInfo.Name);
-            }
-
-            if (localdata.Count > 1)
-            {
-                e.Result = string.Join(",", localdata.ToArray());
-            }
-            else if (localdata.Count == 1)
-            {
-                e.Result = localdata[0] + ',';
-            }
-
             try
             {
                 WebClient client = new WebClient();
-                e.Result += client.DownloadString(url);
+                string onlinedata = client.DownloadString(url);
+                e.Result = onlinedata;
                 client.Dispose();
             }
-            catch
-            {
-                e.Result = null;
-            };
+            catch { e.Result = string.Empty; };
         }
     }
 }
