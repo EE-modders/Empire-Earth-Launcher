@@ -89,6 +89,7 @@ namespace EELauncher
             // windowsVersionComboBox
             // 
             this.windowsVersionComboBox.BackColor = System.Drawing.Color.Black;
+            this.windowsVersionComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.windowsVersionComboBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.windowsVersionComboBox.ForeColor = System.Drawing.Color.Khaki;
             this.windowsVersionComboBox.FormattingEnabled = true;

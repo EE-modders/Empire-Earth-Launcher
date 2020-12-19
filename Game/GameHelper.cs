@@ -192,7 +192,7 @@ namespace EELauncher
             return res;
         }
 
-        public void Start(bool intro)
+        public void Start()
         {
             Process process = new Process();
             process.StartInfo.WorkingDirectory = GetInstallFolder().FullName;
