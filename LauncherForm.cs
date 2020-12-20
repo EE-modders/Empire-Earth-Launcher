@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -8,25 +9,43 @@ namespace EELauncher
     public partial class LauncherForm : Form
     {
         public static bool storage_online = false;
+        public static LauncherConfig launcherConfig = new LauncherConfig(new IniFile("./config.ini"));
 
         public LauncherForm()
         {
             InitializeComponent();
 
+            if (!File.Exists("./config.ini"))
+                new FileInfo("./config.ini").Create().Close();
+
+            launcherConfig.Init();
+
+            discordCheckBox.Enabled = Utils.discordSupport();
+
+
             // Will be enabled after connection check
             playButton.Enabled = false;
             storage_online = false;
 
+            // Lang is done in LanguagesHelper
+            menuComboBox.Text = launcherConfig.GetMenu();
+            dgVoodooComboBox.Text = launcherConfig.GetDgVoodoo();
+
+            oldHardwareCheckBox.Checked = Utils.isWindowsOld();
+            drexCheckBox.Checked = launcherConfig.GetDreXmod();
+            neoCheckBox.Checked = launcherConfig.GetNeo();
+            discordCheckBox.Checked = launcherConfig.GetDiscord();
+            fullGameCheckBox.Checked = launcherConfig.GetFullGame();
+            rebornCheckBox.Checked = launcherConfig.GetReborn();
+
+            skipIntrocheckBox.Checked = launcherConfig.GetSkipIntro();
+
+            helperCheckBox.Checked = launcherConfig.GetHelp();
+
             RefreshHelpLabels();
 
-            discordCheckBox.Enabled = Utils.discordSupport();
-            oldHardwareCheckBox.Checked = Utils.isWindowsOld();
-            dgVoodooComboBox.Enabled = Utils.dgVoodooSupport();
-
             if (drexCheckBox.Checked == false)
-            {
                 menuComboBox.Enabled = false;
-            }
 
             new LanguagesHelper(null).OfflinePop(langComboBox);
             RemoteData();
@@ -51,6 +70,7 @@ namespace EELauncher
         private void RefreshHelpLabels()
         {
             bool state = helperCheckBox.Checked;
+            langHelpLabel.Visible = state;
             menuHelpLabel.Visible = state;
             dgVoodooHelpLabel.Visible = state;
             eehelperHelperLabel.Visible = state;
@@ -121,6 +141,7 @@ namespace EELauncher
                     bool skipIntro = skipIntrocheckBox.Checked;
                     bool fullGame = fullGameCheckBox.Checked;
                     bool dreXmod = drexCheckBox.Checked;
+                    string dreXmodConfig = menuComboBox.Text;
 
                     SynchronizationContext uiSynch = SynchronizationContext.Current;
 
@@ -130,15 +151,32 @@ namespace EELauncher
                         ContentUpdater contentUpdater = new ContentUpdater(gameHelper, downloadLabel, progressBar, uiSynch);
                         contentUpdater.UpdateLang(lang);
 
+                        contentUpdater.UpdateIntro(skipIntro, lang);
+                        contentUpdater.UpdateDrex(dreXmod, dreXmodConfig);
+
                         if (fullGame)
                         {
-                            contentUpdater.UpdateIntro(skipIntro, lang);
                             contentUpdater.UpdateData(lang);
                         }
                     };
 
                     backgroundWorker.RunWorkerCompleted += delegate (object send, RunWorkerCompletedEventArgs eve)
                     {
+                        // Save Config
+                        launcherConfig.SetLanguage(langComboBox.Text);
+                        launcherConfig.SetMenu(menuComboBox.Text);
+                        launcherConfig.SetDgVoodoo(dgVoodooComboBox.Text);
+
+                        launcherConfig.SetDreXmod(drexCheckBox.Checked);
+                        launcherConfig.SetNeo(neoCheckBox.Checked);
+                        launcherConfig.SetDiscord(discordCheckBox.Checked);
+                        launcherConfig.SetFullGame(fullGameCheckBox.Checked);
+                        launcherConfig.SetReborn(rebornCheckBox.Checked);
+
+                        launcherConfig.SetSkipIntro(skipIntrocheckBox.Checked);
+
+                        launcherConfig.SetHelp(helperCheckBox.Checked);
+
                         MessageBox.Show("AFTER UPDATE");
                         gameHelper.Start();
                     };

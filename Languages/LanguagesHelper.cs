@@ -60,10 +60,13 @@ namespace EELauncher
                 {
                     if (!comboBox.Items.Contains(lang))
                     {
-                        comboBox.Items.Add(lang);
+                        int loc = comboBox.Items.Add(lang);
+                        if (lang.Equals(LauncherForm.launcherConfig.GetLanguage()))
+                            comboBox.SelectedIndex = loc;
                     }
                 }
             }
+
         }
 
         private void LanguagesHelperBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -76,7 +79,9 @@ namespace EELauncher
                 {
                     if (!comboBox.Items.Contains(lang))
                     {
-                        comboBox.Items.Add(lang);
+                        int loc = comboBox.Items.Add(lang);
+                        if (lang.Equals(LauncherForm.launcherConfig.GetLanguage()))
+                            comboBox.SelectedIndex = loc;
                     }
                 }
             }

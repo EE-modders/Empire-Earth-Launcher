@@ -69,6 +69,7 @@ namespace EELauncher
             this.skipIntrocheckBox = new System.Windows.Forms.CheckBox();
             this.fullGameCheckBox = new System.Windows.Forms.CheckBox();
             this.langHelpLabel = new System.Windows.Forms.Label();
+            this.rebornCheckBox = new System.Windows.Forms.CheckBox();
             this.energyGroupBox.SuspendLayout();
             this.neoGroupBox.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -99,9 +100,9 @@ namespace EELauncher
             // 
             this.downloadLabel.BackColor = System.Drawing.Color.Transparent;
             this.downloadLabel.ForeColor = System.Drawing.Color.White;
-            this.downloadLabel.Location = new System.Drawing.Point(276, 284);
+            this.downloadLabel.Location = new System.Drawing.Point(244, 284);
             this.downloadLabel.Name = "downloadLabel";
-            this.downloadLabel.Size = new System.Drawing.Size(281, 13);
+            this.downloadLabel.Size = new System.Drawing.Size(313, 13);
             this.downloadLabel.TabIndex = 10;
             this.downloadLabel.Text = "Download useless files...";
             this.downloadLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -391,9 +392,10 @@ namespace EELauncher
             this.menuComboBox.ForeColor = System.Drawing.Color.Khaki;
             this.menuComboBox.FormattingEnabled = true;
             this.menuComboBox.Items.AddRange(new object[] {
-            "Disabled 4:3 (800x400)",
-            "16:9 (1920x1080)",
-            "16:9 (1280x720)"});
+            "Disabled",
+            "1920x1080",
+            "1280x720",
+            "800x400"});
             this.menuComboBox.Location = new System.Drawing.Point(98, 172);
             this.menuComboBox.Name = "menuComboBox";
             this.menuComboBox.Size = new System.Drawing.Size(137, 21);
@@ -525,6 +527,7 @@ namespace EELauncher
             // 
             this.oldHardwareCheckBox.AutoSize = true;
             this.oldHardwareCheckBox.BackColor = System.Drawing.Color.Transparent;
+            this.oldHardwareCheckBox.Enabled = false;
             this.oldHardwareCheckBox.ForeColor = System.Drawing.Color.Khaki;
             this.oldHardwareCheckBox.Location = new System.Drawing.Point(7, 42);
             this.oldHardwareCheckBox.Name = "oldHardwareCheckBox";
@@ -550,11 +553,11 @@ namespace EELauncher
             this.fullGameCheckBox.AutoSize = true;
             this.fullGameCheckBox.BackColor = System.Drawing.Color.Transparent;
             this.fullGameCheckBox.ForeColor = System.Drawing.Color.Khaki;
-            this.fullGameCheckBox.Location = new System.Drawing.Point(39, 259);
+            this.fullGameCheckBox.Location = new System.Drawing.Point(42, 259);
             this.fullGameCheckBox.Name = "fullGameCheckBox";
-            this.fullGameCheckBox.Size = new System.Drawing.Size(190, 17);
+            this.fullGameCheckBox.Size = new System.Drawing.Size(73, 17);
             this.fullGameCheckBox.TabIndex = 34;
-            this.fullGameCheckBox.Text = "Full Game (Voices and Campaigns)";
+            this.fullGameCheckBox.Text = "Full Game";
             this.fullGameCheckBox.UseVisualStyleBackColor = false;
             // 
             // langHelpLabel
@@ -570,6 +573,19 @@ namespace EELauncher
             this.langHelpLabel.Text = "?";
             this.langHelpLabel.Click += new System.EventHandler(this.langHelpLabel_Click);
             // 
+            // rebornCheckBox
+            // 
+            this.rebornCheckBox.AutoSize = true;
+            this.rebornCheckBox.BackColor = System.Drawing.Color.Transparent;
+            this.rebornCheckBox.Enabled = false;
+            this.rebornCheckBox.ForeColor = System.Drawing.Color.Khaki;
+            this.rebornCheckBox.Location = new System.Drawing.Point(121, 259);
+            this.rebornCheckBox.Name = "rebornCheckBox";
+            this.rebornCheckBox.Size = new System.Drawing.Size(102, 17);
+            this.rebornCheckBox.TabIndex = 36;
+            this.rebornCheckBox.Text = "Reborn Preview";
+            this.rebornCheckBox.UseVisualStyleBackColor = false;
+            // 
             // LauncherForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -578,6 +594,7 @@ namespace EELauncher
             this.BackgroundImage = global::EELauncher.Properties.Resources.launcher_image1;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ClientSize = new System.Drawing.Size(588, 378);
+            this.Controls.Add(this.rebornCheckBox);
             this.Controls.Add(this.langHelpLabel);
             this.Controls.Add(this.fullGameCheckBox);
             this.Controls.Add(this.groupBox1);
@@ -665,6 +682,7 @@ namespace EELauncher
         private System.Windows.Forms.CheckBox skipIntrocheckBox;
         private System.Windows.Forms.CheckBox fullGameCheckBox;
         private System.Windows.Forms.Label langHelpLabel;
+        private System.Windows.Forms.CheckBox rebornCheckBox;
     }
 }
 
