@@ -38,19 +38,22 @@ namespace EELauncher
                 {
                     hashOnline = webClient.DownloadString(
                         url.Replace("https:", "http:").
-                        Replace(Path.GetFileName(path).Replace(" ", "%20"),
-                        Path.GetFileNameWithoutExtension(path).Replace(" ", "%20") + ".crc32")).ToLower();
+                        Replace(Path.GetFileName(url).Replace(" ", "%20"),
+                        Path.GetFileNameWithoutExtension(url).Replace(" ", "%20") + ".crc32")).ToLower();
                 }
             }
             catch
             {
                 Console.WriteLine("CheckSum Fail For " + url.Replace("https:", "http:").
-                        Replace(Path.GetFileName(path).Replace(" ", "%20"),
-                        Path.GetFileNameWithoutExtension(path).Replace(" ", "%20") + ".crc32"));
+                        Replace(Path.GetFileName(url).Replace(" ", "%20"),
+                        Path.GetFileNameWithoutExtension(url).Replace(" ", "%20") + ".crc32"));
                 return false;
             }
 
             Console.WriteLine(Path.GetFileName(path) + " | " + hashLocal + " (local) | (online) " + hashOnline);
+
+            if (hashLocal.Equals("00000000"))
+                return false;
 
             if (hashLocal.Equals(hashOnline) &&
                 !string.IsNullOrEmpty(hashLocal) &&
@@ -68,9 +71,7 @@ namespace EELauncher
             string hashLocal = string.Empty;
 
             if (!new FileInfo(path).Exists)
-            {
                 return null;
-            }
 
             try
             {
@@ -86,6 +87,9 @@ namespace EELauncher
             {
                 return null;
             }
+
+            if (hashLocal.Equals("00000000"))
+                return null;
 
             return hashLocal;
         }
