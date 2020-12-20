@@ -97,17 +97,18 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContentUpdater.cs" />
+    <Compile Include="Config\LauncherConfig.cs" />
+    <Compile Include="Network\ContentUpdater.cs" />
     <Compile Include="CustomizeLobbyForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="CustomizeLobbyForm.Designer.cs">
       <DependentUpon>CustomizeLobbyForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="FileDownloadHelper.cs" />
+    <Compile Include="Network\FileDownloadHelper.cs" />
     <Compile Include="Utils\CheckSumHelper.cs" />
     <Compile Include="Utils\Crc32.cs" />
-    <Compile Include="Game\GameDownloadHelper.cs" />
+    <Compile Include="Network\GameDownloadHelper.cs" />
     <Compile Include="Game\GameHelper.cs" />
     <Compile Include="IndividualSetupForm.cs">
       <SubType>Form</SubType>
@@ -115,9 +116,9 @@
     <Compile Include="IndividualSetupForm.Designer.cs">
       <DependentUpon>IndividualSetupForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Utils\IniFile.cs" />
+    <Compile Include="Config\IniFile.cs" />
     <Compile Include="Languages\LanguagesHelper.cs" />
-    <Compile Include="Utils\PingHelper.cs" />
+    <Compile Include="Network\PingHelper.cs" />
     <Compile Include="LauncherForm.cs">
       <SubType>Form</SubType>
     </Compile>
