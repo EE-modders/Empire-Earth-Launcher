@@ -1,5 +1,25 @@
 # Empire Earth Launcher
 
+### The project is being reworked. I'm still in the draft stage but changes will take place.
+
+The project will **move from .NET 2 to 3.5 or 4**\
+Will support Windows XP to 10 (So not using .NET 2 will **drop support for Windows 98 and 2000**)\
+Will switch **from WinForm to WPF**\
+Will have a **completely reworked interface**\
+The **code will be almost completely rewritten**
+
+New features ideas :
+
+Addons Browser and Installer\
+A full list of compatiblity settings\
+A build-in compatibility tracker or a way to give feedback about config
+
+Note :\
+We have to admit that the code currently written is not very good and done in a hurry, this is one of the main causes of this decision.\
+The project will of course stay under [GNU General Public License v3.0](https://github.com/EE-modders/Empire-Earth-Launcher/blob/main/LICENSE)
+
+---
+
 A launcher for Empire Earth 1, simple and complete.\
 Coded in C# with the .NET Framework 2
 
