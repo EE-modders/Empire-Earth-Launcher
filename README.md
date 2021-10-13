@@ -23,7 +23,7 @@ The project will of course stay under [GNU General Public License v3.0](https://
 A launcher for Empire Earth 1, simple and complete.\
 Coded in C# with the .NET Framework 2
 
-![image](https://github.com/EE-modders/Empire-Earth-Launcher/blob/main/ui_demo.png)
+![image](https://github.com/EE-modders/Empire-Earth-Launcher/blob/archived_net2_winform/ui_demo.png)
          
 ## 🧾 (Planned) Features
 NeoEE Support\
