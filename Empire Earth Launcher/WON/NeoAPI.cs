@@ -10,19 +10,21 @@ namespace Empire_Earth_Launcher.WON
 
     public class NeoAPI
     {
-        private string ip = "titan.empireearth.eu";
-        private int port = 10005;
+        private string ip;
+        private int port;
 
         public enum RequestType
         {
-            INFO_MESSAGE = 7, CONNECTED_PLAYERS_MESSAGE = 8, GAMES_MESSAGE = 9
+            INFO_MESSAGE = 7, CONNECTED_PLAYERS_MESSAGE = 8, GAMES_MESSAGE = 9, CHAT_MESSAGE = 10
         }
 
         private RequestType requestType;
 
-        public NeoAPI(RequestType requestType)
+        public NeoAPI(RequestType requestType, string ip = "titan.empireearth.eu", int port = 10005)
         {
             this.requestType = requestType;
+            this.ip = ip;
+            this.port = port;
         }
 
         public string[] SendRequest(char split)
@@ -60,6 +62,13 @@ namespace Empire_Earth_Launcher.WON
 
 
                         result = Encoding.UTF8.GetString(rec, 0, rec.Length).Split(split);
+
+                        if (result.Length != 0)
+                        {
+                            Console.WriteLine("Reply from NeoAPI for " + requestType);
+                            foreach(string reply in result)
+                                Console.WriteLine(reply);
+                        }
                     }
                 }
             }

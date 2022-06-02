@@ -9,13 +9,14 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Empire_Earth_Launcher.WON;
 
 namespace Empire_Earth_Launcher
 {
     public partial class GeneralUserControl : UserControl
     {
         private BackgroundWorker backgroundWorker;
-        private WON.LobbyPersistentData.LobbyUserData lobbyUserData;
+        private LobbyPersistentData.LobbyUserData lobbyUserData;
 
         public GeneralUserControl()
         {
@@ -32,22 +33,25 @@ namespace Empire_Earth_Launcher
             backgroundWorker.RunWorkerAsync();
 
 
-            WON.LobbyPersistentData.LobbyGlobalData test = new WON.LobbyPersistentData.LobbyGlobalData("./_wonlobbypersistent.dat");
+            LobbyPersistentData.LobbyGlobalData test = new WON.LobbyPersistentData.LobbyGlobalData("./_wonlobbypersistent.dat");
             foreach (var lobbyGlobalData in test.PlayerInfoGlobalDatas.OrderByDescending(d => d.LastUse))
             {
                 usersLobbyKryptonComboBox.Items.Add(lobbyGlobalData.Username);
             }
             usersLobbyKryptonComboBox.SelectedIndex = 0;
+
+            new NeoAPI(NeoAPI.RequestType.GAMES_MESSAGE).SendRequest('\x0B');
+            new NeoAPI(NeoAPI.RequestType.CHAT_MESSAGE).SendRequest('\x0B');
         }
 
         private void backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            WON.NeoAPI.ConnectedPlayersMessage ConnectedPlayersMessage = ((WON.NeoAPI.ConnectedPlayersMessage)e.UserState);
+            NeoAPI.ConnectedPlayersMessage ConnectedPlayersMessage = ((NeoAPI.ConnectedPlayersMessage)e.UserState);
             onlinePlayersKryptonDataGridView.Rows.Clear();
 
             neoOnlineKryptonGroupBox.Values.Heading = "Online Players (" + ConnectedPlayersMessage.OnlinePlayers + ")";
 
-            foreach (WON.NeoAPI.ConnectedPlayersMessage.PlayerInfo pInfo in ConnectedPlayersMessage.PlayersInfo)
+            foreach (NeoAPI.ConnectedPlayersMessage.PlayerInfo pInfo in ConnectedPlayersMessage.PlayersInfo)
             {
                 if (!usersLobbyKryptonComboBox.Text.Equals(pInfo.Name, StringComparison.InvariantCultureIgnoreCase))
                     onlinePlayersKryptonDataGridView.Rows.Add(pInfo.Name + pInfo.Name, pInfo.GameStateToString(pInfo.GameState));
@@ -59,17 +63,17 @@ namespace Empire_Earth_Launcher
             BackgroundWorker worker = (BackgroundWorker)sender;
             while (!worker.CancellationPending)
             {
-                worker.ReportProgress(0, new WON.NeoAPI.ConnectedPlayersMessage());
+                worker.ReportProgress(0, new NeoAPI.ConnectedPlayersMessage());
                 Thread.Sleep(5000);
             }
         }
 
         private void usersLobbyKryptonComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            WON.LobbyPersistentData.LobbyGlobalData test = new WON.LobbyPersistentData.LobbyGlobalData("./_wonlobbypersistent.dat");
+            LobbyPersistentData.LobbyGlobalData test = new LobbyPersistentData.LobbyGlobalData("./_wonlobbypersistent.dat");
 
             int lobbyFileId = -1;
-            foreach (WON.LobbyPersistentData.LobbyGlobalData.PlayerInfoGlobalData lobbyGlobalData in test.PlayerInfoGlobalDatas)
+            foreach (LobbyPersistentData.LobbyGlobalData.PlayerInfoGlobalData lobbyGlobalData in test.PlayerInfoGlobalDatas)
             {
                 if (lobbyGlobalData.Username.Equals(usersLobbyKryptonComboBox.Text))
                 {
@@ -86,7 +90,7 @@ namespace Empire_Earth_Launcher
 
             if (!fileInfo.Exists)
                 return;
-            lobbyUserData = new WON.LobbyPersistentData.LobbyUserData(fileInfo.FullName);
+            lobbyUserData = new LobbyPersistentData.LobbyUserData(fileInfo.FullName);
             neoOnlineKryptonGroupBox.Values.Description = "Friends (" + lobbyUserData.Friends.Count + ")";
         }
     }
