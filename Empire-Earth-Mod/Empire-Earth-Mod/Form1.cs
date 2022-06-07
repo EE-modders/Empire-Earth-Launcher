@@ -19,5 +19,17 @@ namespace Empire_Earth_Mod
             InitializeComponent();
             label1.Text += WindowsVersion.GetWindowsVersionName(WindowsVersion.GetCurrentWindowsVersion());
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            ModData mod = new ModData("Empire Earth Mod", "An amazing description");
+            Debug.WriteLine("Mod UUID: " + mod.Uuid);
+
+        }
     }
 }

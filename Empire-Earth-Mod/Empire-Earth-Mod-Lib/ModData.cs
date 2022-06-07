@@ -23,9 +23,9 @@ namespace Empire_Earth_Mod_Lib
         public string Contact { get; set; }
         public List<string> SupportedLanguages { get; set; }
         public List<string> Variants { get; set; }
-        public List<ModFile> ModFiles;
-        public List<string> RequiredMods;
-        public List<string> IncompatibleMods;
+        public List<ModFile> ModFiles { get; set; }
+        public List<string> RequiredMods { get; set; }
+        public List<string> IncompatibleMods { get; set; }
         
         public string LicenseName { get; set; }
         public string LicenseTxt { get; set; }
@@ -40,7 +40,19 @@ namespace Empire_Earth_Mod_Lib
 
         public WindowsVersion.WindowsVersionEnum MinWindows { get; set; }
 
-        public ModData(){}
+        public ModData(string name, string description)
+        {
+            Name = name;
+            Description = description;
+            Uuid = Guid.NewGuid();
+            Banners = new List<Image>();
+            Authors = new List<string>();
+            SupportedLanguages = new List<string>();
+            Variants = new List<string>();
+            ModFiles = new List<ModFile>();
+            RequiredMods = new List<string>();
+            IncompatibleMods = new List<string>();
+        }
 
         public void GetImageAsync(string url)
         {
