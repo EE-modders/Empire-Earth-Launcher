@@ -4,10 +4,6 @@ using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Net;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Threading.Tasks;
 
 namespace Empire_Earth_Mod_Lib
 {
@@ -40,35 +36,16 @@ namespace Empire_Earth_Mod_Lib
 
         // Mod EE Impact
         public bool EE { get; set; }
-        public bool AoC { get; set; }
+        public bool AoC { get; set; } 
 
-        public WindowsVersionHelper MinWindows { get; set; }
+        public WindowsVersion.WindowsVersionEnum MinWindows { get; set; }
 
         public ModData(){}
 
-        public async Task<Image> GetImageAsync(string url)
+        public void GetImageAsync(string url)
         {
-            var tcs = new TaskCompletionSource<Image>();
-            Image webImage = null;
-            HttpWebRequest request = (HttpWebRequest) WebRequest.Create(url);
-            request.Method = "GET";
-            await Task.Factory.FromAsync<WebResponse>(request.BeginGetResponse, request.EndGetResponse, null)
-                .ContinueWith(task =>
-                {
-                    var webResponse = (HttpWebResponse) task.Result;
-                    Stream responseStream = webResponse.GetResponseStream();
-                    if (responseStream == null)
-                        return;
-                    if (webResponse.ContentEncoding.ToLower().Contains("gzip"))
-                        responseStream = new GZipStream(responseStream, CompressionMode.Decompress);
-                    else if (webResponse.ContentEncoding.ToLower().Contains("deflate"))
-                        responseStream = new DeflateStream(responseStream, CompressionMode.Decompress);
-                    webImage = Image.FromStream(responseStream);
-                    tcs.TrySetResult(webImage);
-                    webResponse.Close();
-                    responseStream.Close();
-                });
-            return tcs.Task.Result;
+            // Since I use .NET 4 (to support WinXP) I can't download that asych...
+            // So I need some background worker sh$t or idk...
         }
         
         public static ModData LoadFromEEM(string eemPath)

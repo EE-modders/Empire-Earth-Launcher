@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Empire_Earth_Mod_Lib;
 
 namespace Empire_Earth_Mod
 {
@@ -16,6 +17,7 @@ namespace Empire_Earth_Mod
         public Form1()
         {
             InitializeComponent();
+            label1.Text += WindowsVersion.GetWindowsVersionName(WindowsVersion.GetCurrentWindowsVersion());
         }
     }
 }
