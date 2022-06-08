@@ -22,7 +22,7 @@ namespace Empire_Earth_Mod_Lib
         public List<string> Authors { get; set; }
         public string Contact { get; set; }
         public List<string> SupportedLanguages { get; set; }
-        public List<string> Variants { get; set; }
+        public Dictionary<Guid, string> Variants { get; set; }
         public List<ModFile> ModFiles { get; set; }
         public List<string> RequiredMods { get; set; }
         public List<string> IncompatibleMods { get; set; }
@@ -48,7 +48,7 @@ namespace Empire_Earth_Mod_Lib
             Banners = new List<Image>();
             Authors = new List<string>();
             SupportedLanguages = new List<string>();
-            Variants = new List<string>();
+            Variants = new Dictionary<Guid, string>();
             ModFiles = new List<ModFile>();
             RequiredMods = new List<string>();
             IncompatibleMods = new List<string>();

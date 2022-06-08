@@ -43,6 +43,7 @@
         <Compile Include="ModData.cs" />
         <Compile Include="ModFile.cs" />
         <Compile Include="ModManager.cs" />
+        <Compile Include="ModVariant.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Serializer.cs" />
         <Compile Include="WindowsVersion.cs" />

@@ -1,18 +1,25 @@
-﻿namespace Empire_Earth_Mod_Lib
+﻿using System.ComponentModel;
+
+namespace Empire_Earth_Mod_Lib
 {
     public class ModFile
     {
         public string RelativeFilePath { get; set; }
-        public bool Edit { get; set; }
         public bool Remove { get; set; }
-        public bool Backup { get; set; }
+        public ModFileType Type { get; set; }
         public string CRC32 { get; set; }
-
-        public ModFile(string relativeFilePath, bool edit, bool remove, bool backup, string crc32)
+        
+        public enum ModFileType
         {
-            this.Edit = edit;
+            [Description("Data")] Data = 0,
+            [Description("Config File")] ConfigFile = 1,
+            [Description("Executable")] Executable = 2
+        }
+
+        public ModFile(string relativeFilePath, bool remove, ModFileType type, string crc32)
+        {
             this.Remove = remove;
-            this.Backup = backup;
+            this.Type = type;
             this.CRC32 = crc32;
             this.RelativeFilePath = relativeFilePath;
         }

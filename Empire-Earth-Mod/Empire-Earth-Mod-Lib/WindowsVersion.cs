@@ -7,21 +7,27 @@ namespace Empire_Earth_Mod_Lib
 {
     public static class WindowsVersion
     {
+        /*
+         * Version are using big numbers in case we want to add another version
+         * and still being able to compare with < and > operators.
+         * Because ModData will store the version as number, changing the order will result
+         * in an invalid version or invalid comparison.
+         */
         public enum WindowsVersionEnum
         {
-            [Description("Error")] Error = -1,
-            [Description("Wine")] Wine,
-            [Description("Windows 95")] W95,
-            [Description("Windows 98")] W98,
-            [Description("Windows Me")] Me,
-            [Description("Windows NT")] Nt,
-            [Description("Windows 2000")] W2000,
-            [Description("Windows XP")] Xp,
-            [Description("Windows Vista")] Vista,
-            [Description("Windows 7")] Seven,
-            [Description("Windows 8")] Eight,
-            [Description("Windows 10")] Ten,
-            [Description("Windows 11")] Eleven
+            [Description("Error")] Error = 0,
+            [Description("Wine")] Wine = 1,
+            [Description("Windows 95")] W95 = 100,
+            [Description("Windows 98")] W98 = 200,
+            [Description("Windows Me")] Me = 300,
+            [Description("Windows NT")] Nt = 400,
+            [Description("Windows 2000")] W2000 = 500,
+            [Description("Windows XP")] Xp = 600,
+            [Description("Windows Vista")] Vista = 700,
+            [Description("Windows 7")] Seven = 800,
+            [Description("Windows 8")] Eight = 900,
+            [Description("Windows 10")] Ten = 1000,
+            [Description("Windows 11")] Eleven = 1100
         }
 
         [DllImport("kernel32", CharSet = CharSet.Unicode, SetLastError = true)]
@@ -29,7 +35,7 @@ namespace Empire_Earth_Mod_Lib
 
         [DllImport("kernel32", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true)]
         private static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
-        
+
         /**
          * Don't forget to add Windows 10 in supportedOS in app.manifest or
          * it will not be able to detect it

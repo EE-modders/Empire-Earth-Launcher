@@ -32,6 +32,21 @@ namespace Empire_Earth_Mod_Lib
             }
             return true;
         }
+
+        public void Install(FileInfo fileInfo)
+        {
+            
+        }
+        
+        public void Install(Guid uuid)
+        {
+            
+        }
+        
+        public void Uninstall(string uuid)
+        {
+            
+        }
         
     }
 }
