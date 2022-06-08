@@ -59,12 +59,11 @@ namespace Empire_Earth_Mod_Lib
             // Since I use .NET 4 (to support WinXP) I can't download that asych...
             // So I need some background worker sh$t or idk...
         }
-        
+
         public static ModData LoadFromEEM(string eemPath)
         {
             using (MemoryStream dataStream = new MemoryStream())
             {
-
                 using (var zip = ZipStorer.Open(eemPath, FileAccess.Read))
                 {
                     var entry = zip.ReadCentralDir();

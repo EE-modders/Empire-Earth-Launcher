@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,6 +31,21 @@ namespace Empire_Earth_Mod
             ModData mod = new ModData("Empire Earth Mod", "An amazing description");
             Debug.WriteLine("Mod UUID: " + mod.Uuid);
 
+            var di = new DirectoryInfo("./creator");
+            /*if (di.Exists)
+                di.Delete(true);
+            di.Create();*/
+
+            foreach (var dirs in di.GetDirectories())
+            {
+                if (dirs.Name.Equals("default"))
+                {
+                    foreach (var file in dirs.GetFiles())
+                    {
+                        dataGridView1.Rows.Add("file", true, true, true);
+                    }
+                }
+            }
         }
     }
 }
