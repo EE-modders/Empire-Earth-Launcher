@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using Empire_Earth_Mod_Lib.Serialization;
 
 namespace Empire_Earth_Mod_Lib
 {
@@ -35,15 +36,13 @@ namespace Empire_Earth_Mod_Lib
         public DateTime BuildDate { get; set; }
 
         // Mod EE Impact
-        public bool EE { get; set; }
-        public bool AoC { get; set; } 
+        //public bool EE { get; set; }
+        //public bool AoC { get; set; } 
 
         public WindowsVersion.WindowsVersionEnum MinWindows { get; set; }
 
-        public ModData(string name, string description)
+        public ModData()
         {
-            Name = name;
-            Description = description;
             Uuid = Guid.NewGuid();
             Banners = new List<Image>();
             Authors = new List<string>();
@@ -52,6 +51,7 @@ namespace Empire_Earth_Mod_Lib
             ModFiles = new List<ModFile>();
             RequiredMods = new List<string>();
             IncompatibleMods = new List<string>();
+            BuildDate = DateTime.Now;
         }
 
         public void GetImageAsync(string url)
@@ -76,7 +76,7 @@ namespace Empire_Earth_Mod_Lib
                 if (dataStream.Length == 0 && !dataStream.CanRead)
                     throw new Exception("Unable to parse the data file of EEM!");
 
-                ModData modData = (ModData)Serializer.DeserializeFromStream(dataStream);
+                ModData modData = JsonSerializer<ModData>.Deserialize(dataStream);
                 return modData;
             }
         }

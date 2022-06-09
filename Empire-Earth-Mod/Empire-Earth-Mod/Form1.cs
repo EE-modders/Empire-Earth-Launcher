@@ -17,6 +17,7 @@ namespace Empire_Earth_Mod
     {
         
         private ModData newModData;
+        private DirectoryInfo creatorDir;
         
         public Form1()
         {
@@ -26,48 +27,7 @@ namespace Empire_Earth_Mod
 
         private void button1_Click(object sender, EventArgs e)
         {
-            throw new System.NotImplementedException();
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            newModData = new ModData("Empire Earth Mod", "An amazing description");
-            Debug.WriteLine("Mod UUID: " + newModData.Uuid);
-
-            var di = new DirectoryInfo("./creator");
-            /*if (di.Exists)
-                di.Delete(true);
-            di.Create();*/
-
-            foreach (var dirs in di.GetDirectories())
-            {
-                foreach (var file in dirs.GetFiles())
-                {
-                    dataGridView1.Rows.Add(file.Name, dirs.Name, default);
-                }
-            }
-        }
-
-        private void textBox1_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter && sender is TextBox text)
-            {
-                if (Encoding.UTF8.GetByteCount(text.Text) == text.Text.Length)
-                {
-                    string variantName = text.Text.Replace(' ', '_');
-                    listBox1.Items.Add(variantName);
-                    var di = new DirectoryInfo("./creator");
-                    di.CreateSubdirectory(variantName);
-                    text.Text = "";
-                    e.Handled = true;
-                }
-                else
-                {
-                    MessageBox.Show("You can only use ASCII characters in your variant name.",
-                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    e.Handled = true;
-                }
-            }
+            new ModCreatorForm().ShowDialog();
         }
     }
 }
