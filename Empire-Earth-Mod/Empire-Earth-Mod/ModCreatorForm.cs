@@ -11,7 +11,7 @@ namespace Empire_Earth_Mod
     public partial class ModCreatorForm : KryptonForm
     {
         private ModData mod;
-        
+
         public ModCreatorForm()
         {
             InitializeComponent();
@@ -20,10 +20,29 @@ namespace Empire_Earth_Mod
 
         private void kryptonButton1_Click(object sender, EventArgs e)
         {
-            mod.Name = nameKryptonTextBox.Text;
-            mod.Description = descriptionKryptonTextBox.Text;
-            mod.Version = new Version(versionKryptonTextBox.Text);
-            mod.Authors.Add(authorsKryptonTextBox.Text);
+            if (tabControl1.TabIndex == 0)
+            {
+                mod.Name = nameKryptonTextBox.Text;
+                mod.Description = descriptionKryptonTextBox.Text;
+                mod.Version = new Version(versionKryptonTextBox.Text);
+                mod.Authors.Add(authorsKryptonTextBox.Text);
+
+                bannersVariantsKryptonComboBox.Items.Clear();
+                mod.Variants.Clear();
+
+                foreach (DataGridViewRow row in variantsKryptonDataGridView1.Rows)
+                {
+                    mod.Variants.Add(Guid.Parse(row.Cells[1].Value.ToString()), row.Cells[0].Value.ToString());
+                }
+                
+                bannersVariantsKryptonComboBox.Items.AddRange(
+                    mod.Variants.Keys.Select(x => x.ToString() as object).ToArray());
+
+                tabControl1.SelectTab(1);
+            }
+            else
+            {
+            }
 
             Debug.WriteLine(JsonSerializer<ModData>.Serialize(mod));
         }
@@ -32,7 +51,7 @@ namespace Empire_Earth_Mod
         {
             if (!string.IsNullOrWhiteSpace(variantKryptonTextBox.Text))
             {
-                variantsKryptonDataGridView1.Rows.Add(variantKryptonTextBox.Text, mod.Uuid.ToString());
+                variantsKryptonDataGridView1.Rows.Add(variantKryptonTextBox.Text, Guid.NewGuid());
             }
         }
 

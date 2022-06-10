@@ -33,15 +33,13 @@ namespace Empire_Earth_Mod
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.kryptonButton6 = new Krypton.Toolkit.KryptonButton();
-            this.kryptonButton5 = new Krypton.Toolkit.KryptonButton();
-            this.kryptonButton4 = new Krypton.Toolkit.KryptonButton();
-            this.kryptonLabel7 = new Krypton.Toolkit.KryptonLabel();
-            this.kryptonButton3 = new Krypton.Toolkit.KryptonButton();
-            this.kryptonButton2 = new Krypton.Toolkit.KryptonButton();
-            this.bannersPictureBox = new System.Windows.Forms.PictureBox();
-            this.kryptonLabel6 = new Krypton.Toolkit.KryptonLabel();
-            this.iconPictureBox = new System.Windows.Forms.PictureBox();
+            this.variantsKryptonDataGridView1 = new Krypton.Toolkit.KryptonDataGridView();
+            this.VariantName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.VariantUuid = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.kryptonLabel8 = new Krypton.Toolkit.KryptonLabel();
+            this.removeVariantKryptonButton = new Krypton.Toolkit.KryptonButton();
+            this.variantKryptonTextBox = new Krypton.Toolkit.KryptonTextBox();
+            this.addVariantKryptonButton = new Krypton.Toolkit.KryptonButton();
             this.kryptonLabel5 = new Krypton.Toolkit.KryptonLabel();
             this.authorsKryptonTextBox = new Krypton.Toolkit.KryptonTextBox();
             this.kryptonLabel4 = new Krypton.Toolkit.KryptonLabel();
@@ -54,21 +52,29 @@ namespace Empire_Earth_Mod
             this.kryptonLabel1 = new Krypton.Toolkit.KryptonLabel();
             this.nameKryptonTextBox = new Krypton.Toolkit.KryptonTextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.variantsKryptonDataGridView1 = new Krypton.Toolkit.KryptonDataGridView();
-            this.kryptonLabel8 = new Krypton.Toolkit.KryptonLabel();
-            this.removeVariantKryptonButton = new Krypton.Toolkit.KryptonButton();
-            this.variantKryptonTextBox = new Krypton.Toolkit.KryptonTextBox();
-            this.addVariantKryptonButton = new Krypton.Toolkit.KryptonButton();
+            this.kryptonGroupBox1 = new Krypton.Toolkit.KryptonGroupBox();
+            this.kryptonButton6 = new Krypton.Toolkit.KryptonButton();
+            this.kryptonButton5 = new Krypton.Toolkit.KryptonButton();
+            this.kryptonButton3 = new Krypton.Toolkit.KryptonButton();
+            this.kryptonButton2 = new Krypton.Toolkit.KryptonButton();
+            this.bannersPictureBox = new System.Windows.Forms.PictureBox();
+            this.bannersVariantsKryptonComboBox = new Krypton.Toolkit.KryptonComboBox();
+            this.kryptonButton4 = new Krypton.Toolkit.KryptonButton();
+            this.kryptonLabel6 = new Krypton.Toolkit.KryptonLabel();
+            this.iconPictureBox = new System.Windows.Forms.PictureBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.nextKryptonButton = new Krypton.Toolkit.KryptonButton();
-            this.VariantName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.VariantId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bannersPictureBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.iconPictureBox)).BeginInit();
-            this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.variantsKryptonDataGridView1)).BeginInit();
+            this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.kryptonGroupBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.kryptonGroupBox1.Panel)).BeginInit();
+            this.kryptonGroupBox1.Panel.SuspendLayout();
+            this.kryptonGroupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bannersPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bannersVariantsKryptonComboBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.iconPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -84,15 +90,11 @@ namespace Empire_Earth_Mod
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.kryptonButton6);
-            this.tabPage1.Controls.Add(this.kryptonButton5);
-            this.tabPage1.Controls.Add(this.kryptonButton4);
-            this.tabPage1.Controls.Add(this.kryptonLabel7);
-            this.tabPage1.Controls.Add(this.kryptonButton3);
-            this.tabPage1.Controls.Add(this.kryptonButton2);
-            this.tabPage1.Controls.Add(this.bannersPictureBox);
-            this.tabPage1.Controls.Add(this.kryptonLabel6);
-            this.tabPage1.Controls.Add(this.iconPictureBox);
+            this.tabPage1.Controls.Add(this.variantsKryptonDataGridView1);
+            this.tabPage1.Controls.Add(this.kryptonLabel8);
+            this.tabPage1.Controls.Add(this.removeVariantKryptonButton);
+            this.tabPage1.Controls.Add(this.variantKryptonTextBox);
+            this.tabPage1.Controls.Add(this.addVariantKryptonButton);
             this.tabPage1.Controls.Add(this.kryptonLabel5);
             this.tabPage1.Controls.Add(this.authorsKryptonTextBox);
             this.tabPage1.Controls.Add(this.kryptonLabel4);
@@ -112,79 +114,62 @@ namespace Empire_Earth_Mod
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // kryptonButton6
+            // variantsKryptonDataGridView1
             // 
-            this.kryptonButton6.Location = new System.Drawing.Point(386, 205);
-            this.kryptonButton6.Name = "kryptonButton6";
-            this.kryptonButton6.Size = new System.Drawing.Size(75, 23);
-            this.kryptonButton6.TabIndex = 17;
-            this.kryptonButton6.Values.Text = "Remove";
+            this.variantsKryptonDataGridView1.AllowUserToAddRows = false;
+            this.variantsKryptonDataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { this.VariantName, this.VariantUuid });
+            this.variantsKryptonDataGridView1.Location = new System.Drawing.Point(279, 79);
+            this.variantsKryptonDataGridView1.MultiSelect = false;
+            this.variantsKryptonDataGridView1.Name = "variantsKryptonDataGridView1";
+            this.variantsKryptonDataGridView1.RowHeadersVisible = false;
+            this.variantsKryptonDataGridView1.Size = new System.Drawing.Size(326, 174);
+            this.variantsKryptonDataGridView1.TabIndex = 22;
             // 
-            // kryptonButton5
+            // VariantName
             // 
-            this.kryptonButton5.Location = new System.Drawing.Point(533, 205);
-            this.kryptonButton5.Name = "kryptonButton5";
-            this.kryptonButton5.Size = new System.Drawing.Size(75, 23);
-            this.kryptonButton5.TabIndex = 16;
-            this.kryptonButton5.Values.Text = "Add new";
+            this.VariantName.HeaderText = "Name";
+            this.VariantName.Name = "VariantName";
             // 
-            // kryptonButton4
+            // VariantUuid
             // 
-            this.kryptonButton4.Location = new System.Drawing.Point(264, 185);
-            this.kryptonButton4.Name = "kryptonButton4";
-            this.kryptonButton4.Size = new System.Drawing.Size(75, 23);
-            this.kryptonButton4.TabIndex = 1;
-            this.kryptonButton4.Values.Text = "Select";
+            this.VariantUuid.HeaderText = "ID";
+            this.VariantUuid.Name = "VariantUuid";
+            this.VariantUuid.ReadOnly = true;
+            this.VariantUuid.Width = 225;
             // 
-            // kryptonLabel7
+            // kryptonLabel8
             // 
-            this.kryptonLabel7.Location = new System.Drawing.Point(469, 53);
-            this.kryptonLabel7.Name = "kryptonLabel7";
-            this.kryptonLabel7.Size = new System.Drawing.Size(54, 20);
-            this.kryptonLabel7.TabIndex = 15;
-            this.kryptonLabel7.Values.Text = "Banners";
+            this.kryptonLabel8.Location = new System.Drawing.Point(410, 27);
+            this.kryptonLabel8.Name = "kryptonLabel8";
+            this.kryptonLabel8.Size = new System.Drawing.Size(54, 20);
+            this.kryptonLabel8.TabIndex = 21;
+            this.kryptonLabel8.Values.Text = "Variants";
             // 
-            // kryptonButton3
+            // removeVariantKryptonButton
             // 
-            this.kryptonButton3.Location = new System.Drawing.Point(374, 122);
-            this.kryptonButton3.Name = "kryptonButton3";
-            this.kryptonButton3.Size = new System.Drawing.Size(16, 41);
-            this.kryptonButton3.TabIndex = 14;
-            this.kryptonButton3.Values.Text = "<";
+            this.removeVariantKryptonButton.Location = new System.Drawing.Point(508, 53);
+            this.removeVariantKryptonButton.Name = "removeVariantKryptonButton";
+            this.removeVariantKryptonButton.Size = new System.Drawing.Size(24, 20);
+            this.removeVariantKryptonButton.TabIndex = 20;
+            this.removeVariantKryptonButton.Values.Text = "-";
+            this.removeVariantKryptonButton.Click += new System.EventHandler(this.removeVariantKryptonButton_Click);
             // 
-            // kryptonButton2
+            // variantKryptonTextBox
             // 
-            this.kryptonButton2.Location = new System.Drawing.Point(605, 122);
-            this.kryptonButton2.Name = "kryptonButton2";
-            this.kryptonButton2.Size = new System.Drawing.Size(16, 41);
-            this.kryptonButton2.TabIndex = 1;
-            this.kryptonButton2.Values.Text = ">";
+            this.variantKryptonTextBox.Location = new System.Drawing.Point(344, 53);
+            this.variantKryptonTextBox.Name = "variantKryptonTextBox";
+            this.variantKryptonTextBox.Size = new System.Drawing.Size(133, 20);
+            this.variantKryptonTextBox.StateCommon.Content.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.variantKryptonTextBox.TabIndex = 19;
             // 
-            // bannersPictureBox
+            // addVariantKryptonButton
             // 
-            this.bannersPictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.bannersPictureBox.Location = new System.Drawing.Point(386, 79);
-            this.bannersPictureBox.Name = "bannersPictureBox";
-            this.bannersPictureBox.Size = new System.Drawing.Size(222, 129);
-            this.bannersPictureBox.TabIndex = 13;
-            this.bannersPictureBox.TabStop = false;
-            // 
-            // kryptonLabel6
-            // 
-            this.kryptonLabel6.Location = new System.Drawing.Point(281, 78);
-            this.kryptonLabel6.Name = "kryptonLabel6";
-            this.kryptonLabel6.Size = new System.Drawing.Size(34, 20);
-            this.kryptonLabel6.TabIndex = 12;
-            this.kryptonLabel6.Values.Text = "Icon";
-            // 
-            // iconPictureBox
-            // 
-            this.iconPictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.iconPictureBox.Location = new System.Drawing.Point(264, 104);
-            this.iconPictureBox.Name = "iconPictureBox";
-            this.iconPictureBox.Size = new System.Drawing.Size(75, 75);
-            this.iconPictureBox.TabIndex = 11;
-            this.iconPictureBox.TabStop = false;
+            this.addVariantKryptonButton.Location = new System.Drawing.Point(483, 53);
+            this.addVariantKryptonButton.Name = "addVariantKryptonButton";
+            this.addVariantKryptonButton.Size = new System.Drawing.Size(24, 20);
+            this.addVariantKryptonButton.TabIndex = 18;
+            this.addVariantKryptonButton.Values.Text = "+";
+            this.addVariantKryptonButton.Click += new System.EventHandler(this.addVariantKryptonButton_Click);
             // 
             // kryptonLabel5
             // 
@@ -278,11 +263,10 @@ namespace Empire_Earth_Mod
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.variantsKryptonDataGridView1);
-            this.tabPage2.Controls.Add(this.kryptonLabel8);
-            this.tabPage2.Controls.Add(this.removeVariantKryptonButton);
-            this.tabPage2.Controls.Add(this.variantKryptonTextBox);
-            this.tabPage2.Controls.Add(this.addVariantKryptonButton);
+            this.tabPage2.Controls.Add(this.kryptonGroupBox1);
+            this.tabPage2.Controls.Add(this.kryptonButton4);
+            this.tabPage2.Controls.Add(this.kryptonLabel6);
+            this.tabPage2.Controls.Add(this.iconPictureBox);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -291,49 +275,99 @@ namespace Empire_Earth_Mod
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // variantsKryptonDataGridView1
+            // kryptonGroupBox1
             // 
-            this.variantsKryptonDataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { this.VariantName, this.VariantId });
-            this.variantsKryptonDataGridView1.Location = new System.Drawing.Point(21, 75);
-            this.variantsKryptonDataGridView1.MultiSelect = false;
-            this.variantsKryptonDataGridView1.Name = "variantsKryptonDataGridView1";
-            this.variantsKryptonDataGridView1.RowHeadersVisible = false;
-            this.variantsKryptonDataGridView1.Size = new System.Drawing.Size(326, 133);
-            this.variantsKryptonDataGridView1.TabIndex = 5;
+            this.kryptonGroupBox1.Location = new System.Drawing.Point(198, 20);
+            this.kryptonGroupBox1.Name = "kryptonGroupBox1";
             // 
-            // kryptonLabel8
+            // kryptonGroupBox1.Panel
             // 
-            this.kryptonLabel8.Location = new System.Drawing.Point(152, 23);
-            this.kryptonLabel8.Name = "kryptonLabel8";
-            this.kryptonLabel8.Size = new System.Drawing.Size(54, 20);
-            this.kryptonLabel8.TabIndex = 4;
-            this.kryptonLabel8.Values.Text = "Variants";
+            this.kryptonGroupBox1.Panel.Controls.Add(this.kryptonButton6);
+            this.kryptonGroupBox1.Panel.Controls.Add(this.kryptonButton5);
+            this.kryptonGroupBox1.Panel.Controls.Add(this.kryptonButton3);
+            this.kryptonGroupBox1.Panel.Controls.Add(this.kryptonButton2);
+            this.kryptonGroupBox1.Panel.Controls.Add(this.bannersPictureBox);
+            this.kryptonGroupBox1.Panel.Controls.Add(this.bannersVariantsKryptonComboBox);
+            this.kryptonGroupBox1.Size = new System.Drawing.Size(397, 247);
+            this.kryptonGroupBox1.TabIndex = 28;
+            this.kryptonGroupBox1.Values.Heading = "Banners";
             // 
-            // removeVariantKryptonButton
+            // kryptonButton6
             // 
-            this.removeVariantKryptonButton.Location = new System.Drawing.Point(250, 49);
-            this.removeVariantKryptonButton.Name = "removeVariantKryptonButton";
-            this.removeVariantKryptonButton.Size = new System.Drawing.Size(24, 20);
-            this.removeVariantKryptonButton.TabIndex = 3;
-            this.removeVariantKryptonButton.Values.Text = "-";
-            this.removeVariantKryptonButton.Click += new System.EventHandler(this.removeVariantKryptonButton_Click);
+            this.kryptonButton6.Location = new System.Drawing.Point(85, 182);
+            this.kryptonButton6.Name = "kryptonButton6";
+            this.kryptonButton6.Size = new System.Drawing.Size(75, 23);
+            this.kryptonButton6.TabIndex = 41;
+            this.kryptonButton6.Values.Text = "Remove";
             // 
-            // variantKryptonTextBox
+            // kryptonButton5
             // 
-            this.variantKryptonTextBox.Location = new System.Drawing.Point(86, 49);
-            this.variantKryptonTextBox.Name = "variantKryptonTextBox";
-            this.variantKryptonTextBox.Size = new System.Drawing.Size(133, 20);
-            this.variantKryptonTextBox.StateCommon.Content.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.variantKryptonTextBox.TabIndex = 2;
+            this.kryptonButton5.Location = new System.Drawing.Point(232, 182);
+            this.kryptonButton5.Name = "kryptonButton5";
+            this.kryptonButton5.Size = new System.Drawing.Size(75, 23);
+            this.kryptonButton5.TabIndex = 40;
+            this.kryptonButton5.Values.Text = "Add new";
             // 
-            // addVariantKryptonButton
+            // kryptonButton3
             // 
-            this.addVariantKryptonButton.Location = new System.Drawing.Point(225, 49);
-            this.addVariantKryptonButton.Name = "addVariantKryptonButton";
-            this.addVariantKryptonButton.Size = new System.Drawing.Size(24, 20);
-            this.addVariantKryptonButton.TabIndex = 1;
-            this.addVariantKryptonButton.Values.Text = "+";
-            this.addVariantKryptonButton.Click += new System.EventHandler(this.addVariantKryptonButton_Click);
+            this.kryptonButton3.Location = new System.Drawing.Point(73, 99);
+            this.kryptonButton3.Name = "kryptonButton3";
+            this.kryptonButton3.Size = new System.Drawing.Size(16, 41);
+            this.kryptonButton3.TabIndex = 39;
+            this.kryptonButton3.Values.Text = "<";
+            // 
+            // kryptonButton2
+            // 
+            this.kryptonButton2.Location = new System.Drawing.Point(304, 99);
+            this.kryptonButton2.Name = "kryptonButton2";
+            this.kryptonButton2.Size = new System.Drawing.Size(16, 41);
+            this.kryptonButton2.TabIndex = 37;
+            this.kryptonButton2.Values.Text = ">";
+            // 
+            // bannersPictureBox
+            // 
+            this.bannersPictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.bannersPictureBox.Location = new System.Drawing.Point(85, 56);
+            this.bannersPictureBox.Name = "bannersPictureBox";
+            this.bannersPictureBox.Size = new System.Drawing.Size(222, 129);
+            this.bannersPictureBox.TabIndex = 38;
+            this.bannersPictureBox.TabStop = false;
+            // 
+            // bannersVariantsKryptonComboBox
+            // 
+            this.bannersVariantsKryptonComboBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.bannersVariantsKryptonComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.bannersVariantsKryptonComboBox.DropDownWidth = 121;
+            this.bannersVariantsKryptonComboBox.IntegralHeight = false;
+            this.bannersVariantsKryptonComboBox.Location = new System.Drawing.Point(138, 18);
+            this.bannersVariantsKryptonComboBox.Name = "bannersVariantsKryptonComboBox";
+            this.bannersVariantsKryptonComboBox.Size = new System.Drawing.Size(121, 21);
+            this.bannersVariantsKryptonComboBox.TabIndex = 36;
+            // 
+            // kryptonButton4
+            // 
+            this.kryptonButton4.Location = new System.Drawing.Point(62, 184);
+            this.kryptonButton4.Name = "kryptonButton4";
+            this.kryptonButton4.Size = new System.Drawing.Size(75, 23);
+            this.kryptonButton4.TabIndex = 24;
+            this.kryptonButton4.Values.Text = "Select";
+            // 
+            // kryptonLabel6
+            // 
+            this.kryptonLabel6.Location = new System.Drawing.Point(83, 52);
+            this.kryptonLabel6.Name = "kryptonLabel6";
+            this.kryptonLabel6.Size = new System.Drawing.Size(34, 20);
+            this.kryptonLabel6.TabIndex = 26;
+            this.kryptonLabel6.Values.Text = "Icon";
+            // 
+            // iconPictureBox
+            // 
+            this.iconPictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.iconPictureBox.Location = new System.Drawing.Point(45, 78);
+            this.iconPictureBox.Name = "iconPictureBox";
+            this.iconPictureBox.Size = new System.Drawing.Size(100, 100);
+            this.iconPictureBox.TabIndex = 25;
+            this.iconPictureBox.TabStop = false;
             // 
             // tabPage3
             // 
@@ -354,18 +388,6 @@ namespace Empire_Earth_Mod
             this.nextKryptonButton.Values.Text = "Next >";
             this.nextKryptonButton.Click += new System.EventHandler(this.kryptonButton1_Click);
             // 
-            // VariantName
-            // 
-            this.VariantName.HeaderText = "Name";
-            this.VariantName.Name = "VariantName";
-            // 
-            // VariantId
-            // 
-            this.VariantId.HeaderText = "ID";
-            this.VariantId.Name = "VariantId";
-            this.VariantId.ReadOnly = true;
-            this.VariantId.Width = 225;
-            // 
             // ModCreatorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -380,16 +402,24 @@ namespace Empire_Earth_Mod
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bannersPictureBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.iconPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.variantsKryptonDataGridView1)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.variantsKryptonDataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.kryptonGroupBox1.Panel)).EndInit();
+            this.kryptonGroupBox1.Panel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.kryptonGroupBox1)).EndInit();
+            this.kryptonGroupBox1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.bannersPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bannersVariantsKryptonComboBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.iconPictureBox)).EndInit();
             this.ResumeLayout(false);
         }
 
         private System.Windows.Forms.DataGridViewTextBoxColumn VariantName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn VariantId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn VariantUuid;
+
+        private Krypton.Toolkit.KryptonGroupBox kryptonGroupBox1;
+        private Krypton.Toolkit.KryptonComboBox bannersVariantsKryptonComboBox;
 
         private Krypton.Toolkit.KryptonDataGridView variantsKryptonDataGridView1;
 
@@ -406,7 +436,6 @@ namespace Empire_Earth_Mod
 
         private Krypton.Toolkit.KryptonButton kryptonButton2;
         private Krypton.Toolkit.KryptonButton kryptonButton3;
-        private Krypton.Toolkit.KryptonLabel kryptonLabel7;
         private Krypton.Toolkit.KryptonButton kryptonButton4;
 
         private Krypton.Toolkit.KryptonLabel kryptonLabel6;
