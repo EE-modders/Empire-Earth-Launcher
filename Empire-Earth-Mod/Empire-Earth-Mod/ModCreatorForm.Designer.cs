@@ -53,13 +53,14 @@ namespace Empire_Earth_Mod
             this.nameKryptonTextBox = new Krypton.Toolkit.KryptonTextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.kryptonGroupBox1 = new Krypton.Toolkit.KryptonGroupBox();
+            this.kryptonLabel7 = new Krypton.Toolkit.KryptonLabel();
             this.kryptonButton6 = new Krypton.Toolkit.KryptonButton();
             this.kryptonButton5 = new Krypton.Toolkit.KryptonButton();
             this.kryptonButton3 = new Krypton.Toolkit.KryptonButton();
             this.kryptonButton2 = new Krypton.Toolkit.KryptonButton();
             this.bannersPictureBox = new System.Windows.Forms.PictureBox();
             this.bannersVariantsKryptonComboBox = new Krypton.Toolkit.KryptonComboBox();
-            this.kryptonButton4 = new Krypton.Toolkit.KryptonButton();
+            this.iconKryptonButton4 = new Krypton.Toolkit.KryptonButton();
             this.kryptonLabel6 = new Krypton.Toolkit.KryptonLabel();
             this.iconPictureBox = new System.Windows.Forms.PictureBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -264,7 +265,7 @@ namespace Empire_Earth_Mod
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.kryptonGroupBox1);
-            this.tabPage2.Controls.Add(this.kryptonButton4);
+            this.tabPage2.Controls.Add(this.iconKryptonButton4);
             this.tabPage2.Controls.Add(this.kryptonLabel6);
             this.tabPage2.Controls.Add(this.iconPictureBox);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
@@ -282,6 +283,7 @@ namespace Empire_Earth_Mod
             // 
             // kryptonGroupBox1.Panel
             // 
+            this.kryptonGroupBox1.Panel.Controls.Add(this.kryptonLabel7);
             this.kryptonGroupBox1.Panel.Controls.Add(this.kryptonButton6);
             this.kryptonGroupBox1.Panel.Controls.Add(this.kryptonButton5);
             this.kryptonGroupBox1.Panel.Controls.Add(this.kryptonButton3);
@@ -291,6 +293,14 @@ namespace Empire_Earth_Mod
             this.kryptonGroupBox1.Size = new System.Drawing.Size(397, 247);
             this.kryptonGroupBox1.TabIndex = 28;
             this.kryptonGroupBox1.Values.Heading = "Banners";
+            // 
+            // kryptonLabel7
+            // 
+            this.kryptonLabel7.Location = new System.Drawing.Point(125, 35);
+            this.kryptonLabel7.Name = "kryptonLabel7";
+            this.kryptonLabel7.Size = new System.Drawing.Size(88, 20);
+            this.kryptonLabel7.TabIndex = 42;
+            this.kryptonLabel7.Values.Text = "kryptonLabel7";
             // 
             // kryptonButton6
             // 
@@ -307,6 +317,7 @@ namespace Empire_Earth_Mod
             this.kryptonButton5.Size = new System.Drawing.Size(75, 23);
             this.kryptonButton5.TabIndex = 40;
             this.kryptonButton5.Values.Text = "Add new";
+            this.kryptonButton5.Click += new System.EventHandler(this.kryptonButton5_Click);
             // 
             // kryptonButton3
             // 
@@ -339,18 +350,19 @@ namespace Empire_Earth_Mod
             this.bannersVariantsKryptonComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.bannersVariantsKryptonComboBox.DropDownWidth = 121;
             this.bannersVariantsKryptonComboBox.IntegralHeight = false;
-            this.bannersVariantsKryptonComboBox.Location = new System.Drawing.Point(138, 18);
+            this.bannersVariantsKryptonComboBox.Location = new System.Drawing.Point(138, 10);
             this.bannersVariantsKryptonComboBox.Name = "bannersVariantsKryptonComboBox";
             this.bannersVariantsKryptonComboBox.Size = new System.Drawing.Size(121, 21);
             this.bannersVariantsKryptonComboBox.TabIndex = 36;
             // 
-            // kryptonButton4
+            // iconKryptonButton4
             // 
-            this.kryptonButton4.Location = new System.Drawing.Point(62, 184);
-            this.kryptonButton4.Name = "kryptonButton4";
-            this.kryptonButton4.Size = new System.Drawing.Size(75, 23);
-            this.kryptonButton4.TabIndex = 24;
-            this.kryptonButton4.Values.Text = "Select";
+            this.iconKryptonButton4.Location = new System.Drawing.Point(58, 184);
+            this.iconKryptonButton4.Name = "iconKryptonButton4";
+            this.iconKryptonButton4.Size = new System.Drawing.Size(75, 23);
+            this.iconKryptonButton4.TabIndex = 24;
+            this.iconKryptonButton4.Values.Text = "Select";
+            this.iconKryptonButton4.Click += new System.EventHandler(this.iconKryptonButton4_Click);
             // 
             // kryptonLabel6
             // 
@@ -362,10 +374,12 @@ namespace Empire_Earth_Mod
             // 
             // iconPictureBox
             // 
+            this.iconPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.iconPictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.iconPictureBox.Location = new System.Drawing.Point(45, 78);
             this.iconPictureBox.Name = "iconPictureBox";
             this.iconPictureBox.Size = new System.Drawing.Size(100, 100);
+            this.iconPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.iconPictureBox.TabIndex = 25;
             this.iconPictureBox.TabStop = false;
             // 
@@ -407,6 +421,7 @@ namespace Empire_Earth_Mod
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.kryptonGroupBox1.Panel)).EndInit();
             this.kryptonGroupBox1.Panel.ResumeLayout(false);
+            this.kryptonGroupBox1.Panel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.kryptonGroupBox1)).EndInit();
             this.kryptonGroupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.bannersPictureBox)).EndInit();
@@ -414,6 +429,8 @@ namespace Empire_Earth_Mod
             ((System.ComponentModel.ISupportInitialize)(this.iconPictureBox)).EndInit();
             this.ResumeLayout(false);
         }
+
+        private Krypton.Toolkit.KryptonLabel kryptonLabel7;
 
         private System.Windows.Forms.DataGridViewTextBoxColumn VariantName;
         private System.Windows.Forms.DataGridViewTextBoxColumn VariantUuid;
@@ -436,7 +453,7 @@ namespace Empire_Earth_Mod
 
         private Krypton.Toolkit.KryptonButton kryptonButton2;
         private Krypton.Toolkit.KryptonButton kryptonButton3;
-        private Krypton.Toolkit.KryptonButton kryptonButton4;
+        private Krypton.Toolkit.KryptonButton iconKryptonButton4;
 
         private Krypton.Toolkit.KryptonLabel kryptonLabel6;
         private System.Windows.Forms.PictureBox bannersPictureBox;

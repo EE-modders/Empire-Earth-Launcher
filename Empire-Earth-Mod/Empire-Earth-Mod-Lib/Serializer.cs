@@ -8,22 +8,22 @@ using System.Text;
 // ReSharper disable once CheckNamespace
 namespace Empire_Earth_Mod_Lib.Serialization
 {
-    public class BinarySerializer
+    public class BinarySerializer <TType> where TType : class
     {
-        public static MemoryStream Serialize(object o)
+        public static MemoryStream Serialize(TType instance)
         {
             MemoryStream stream = new MemoryStream();
             IFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(stream, o);
+            formatter.Serialize(stream, instance);
             return stream;
         }
 
-        public static object Deserialize(MemoryStream stream)
+        public static TType Deserialize(MemoryStream stream)
         {
             IFormatter formatter = new BinaryFormatter();
             stream.Seek(0, SeekOrigin.Begin);
             var o = formatter.Deserialize(stream);
-            return o;
+            return o as TType;
         }
     }
 

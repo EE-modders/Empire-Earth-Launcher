@@ -8,14 +8,18 @@ using Empire_Earth_Mod_Lib.Serialization;
 
 namespace Empire_Earth_Mod_Lib
 {
+    [Serializable]
     public class ModData
     {
         // Mod UUID
         public Guid Uuid { get; set; }
 
         // Mod Image & Banner(s)
+        [field: NonSerialized]
         public Image Icon { get; set; }
-        public List<Image> Banners { get; set; }
+        
+        [field: NonSerialized]
+        public Dictionary<Image, Guid> Banners { get; set; }
 
         // Mod Basic Info
         public string Name { get; set; }
@@ -44,7 +48,7 @@ namespace Empire_Earth_Mod_Lib
         public ModData()
         {
             Uuid = Guid.NewGuid();
-            Banners = new List<Image>();
+            Banners = new Dictionary<Image, Guid>();
             Authors = new List<string>();
             SupportedLanguages = new List<string>();
             Variants = new Dictionary<Guid, string>();

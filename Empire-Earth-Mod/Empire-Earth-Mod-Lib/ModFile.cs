@@ -1,7 +1,10 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace Empire_Earth_Mod_Lib
 {
+    
+    [Serializable]
     public class ModFile
     {
         public string RelativeFilePath { get; set; }
