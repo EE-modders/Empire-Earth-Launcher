@@ -56,15 +56,24 @@ namespace Empire_Earth_Mod
             this.kryptonLabel7 = new Krypton.Toolkit.KryptonLabel();
             this.kryptonButton6 = new Krypton.Toolkit.KryptonButton();
             this.kryptonButton5 = new Krypton.Toolkit.KryptonButton();
-            this.kryptonButton3 = new Krypton.Toolkit.KryptonButton();
-            this.kryptonButton2 = new Krypton.Toolkit.KryptonButton();
+            this.prevBannerKryptonButton = new Krypton.Toolkit.KryptonButton();
+            this.nextBannerKryptonButton = new Krypton.Toolkit.KryptonButton();
             this.bannersPictureBox = new System.Windows.Forms.PictureBox();
             this.bannersVariantsKryptonComboBox = new Krypton.Toolkit.KryptonComboBox();
             this.iconKryptonButton4 = new Krypton.Toolkit.KryptonButton();
             this.kryptonLabel6 = new Krypton.Toolkit.KryptonLabel();
             this.iconPictureBox = new System.Windows.Forms.PictureBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.kryptonButton1 = new Krypton.Toolkit.KryptonButton();
+            this.kryptonButton2 = new Krypton.Toolkit.KryptonButton();
+            this.filesKryptonComboBox = new Krypton.Toolkit.KryptonComboBox();
+            this.kryptonDataGridView1 = new Krypton.Toolkit.KryptonDataGridView();
+            this.Info = new System.Windows.Forms.DataGridViewImageColumn();
+            this.FileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Product = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Type = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.nextKryptonButton = new Krypton.Toolkit.KryptonButton();
+            this.backKryptonButton = new Krypton.Toolkit.KryptonButton();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.variantsKryptonDataGridView1)).BeginInit();
@@ -76,6 +85,9 @@ namespace Empire_Earth_Mod
             ((System.ComponentModel.ISupportInitialize)(this.bannersPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bannersVariantsKryptonComboBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.iconPictureBox)).BeginInit();
+            this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.filesKryptonComboBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.kryptonDataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -123,11 +135,13 @@ namespace Empire_Earth_Mod
             this.variantsKryptonDataGridView1.MultiSelect = false;
             this.variantsKryptonDataGridView1.Name = "variantsKryptonDataGridView1";
             this.variantsKryptonDataGridView1.RowHeadersVisible = false;
+            this.variantsKryptonDataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.variantsKryptonDataGridView1.Size = new System.Drawing.Size(326, 174);
             this.variantsKryptonDataGridView1.TabIndex = 22;
             // 
             // VariantName
             // 
+            this.VariantName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.VariantName.HeaderText = "Name";
             this.VariantName.Name = "VariantName";
             // 
@@ -136,7 +150,7 @@ namespace Empire_Earth_Mod
             this.VariantUuid.HeaderText = "ID";
             this.VariantUuid.Name = "VariantUuid";
             this.VariantUuid.ReadOnly = true;
-            this.VariantUuid.Width = 225;
+            this.VariantUuid.Width = 230;
             // 
             // kryptonLabel8
             // 
@@ -159,8 +173,7 @@ namespace Empire_Earth_Mod
             // 
             this.variantKryptonTextBox.Location = new System.Drawing.Point(344, 53);
             this.variantKryptonTextBox.Name = "variantKryptonTextBox";
-            this.variantKryptonTextBox.Size = new System.Drawing.Size(133, 20);
-            this.variantKryptonTextBox.StateCommon.Content.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.variantKryptonTextBox.Size = new System.Drawing.Size(133, 23);
             this.variantKryptonTextBox.TabIndex = 19;
             // 
             // addVariantKryptonButton
@@ -286,8 +299,8 @@ namespace Empire_Earth_Mod
             this.kryptonGroupBox1.Panel.Controls.Add(this.kryptonLabel7);
             this.kryptonGroupBox1.Panel.Controls.Add(this.kryptonButton6);
             this.kryptonGroupBox1.Panel.Controls.Add(this.kryptonButton5);
-            this.kryptonGroupBox1.Panel.Controls.Add(this.kryptonButton3);
-            this.kryptonGroupBox1.Panel.Controls.Add(this.kryptonButton2);
+            this.kryptonGroupBox1.Panel.Controls.Add(this.prevBannerKryptonButton);
+            this.kryptonGroupBox1.Panel.Controls.Add(this.nextBannerKryptonButton);
             this.kryptonGroupBox1.Panel.Controls.Add(this.bannersPictureBox);
             this.kryptonGroupBox1.Panel.Controls.Add(this.bannersVariantsKryptonComboBox);
             this.kryptonGroupBox1.Size = new System.Drawing.Size(397, 247);
@@ -296,9 +309,12 @@ namespace Empire_Earth_Mod
             // 
             // kryptonLabel7
             // 
-            this.kryptonLabel7.Location = new System.Drawing.Point(125, 35);
+            this.kryptonLabel7.AutoSize = false;
+            this.kryptonLabel7.Location = new System.Drawing.Point(85, 35);
             this.kryptonLabel7.Name = "kryptonLabel7";
-            this.kryptonLabel7.Size = new System.Drawing.Size(88, 20);
+            this.kryptonLabel7.Size = new System.Drawing.Size(222, 20);
+            this.kryptonLabel7.StateCommon.LongText.TextH = Krypton.Toolkit.PaletteRelativeAlign.Center;
+            this.kryptonLabel7.StateCommon.ShortText.TextH = Krypton.Toolkit.PaletteRelativeAlign.Center;
             this.kryptonLabel7.TabIndex = 42;
             this.kryptonLabel7.Values.Text = "kryptonLabel7";
             // 
@@ -309,6 +325,7 @@ namespace Empire_Earth_Mod
             this.kryptonButton6.Size = new System.Drawing.Size(75, 23);
             this.kryptonButton6.TabIndex = 41;
             this.kryptonButton6.Values.Text = "Remove";
+            this.kryptonButton6.Click += new System.EventHandler(this.kryptonButton6_Click);
             // 
             // kryptonButton5
             // 
@@ -319,28 +336,32 @@ namespace Empire_Earth_Mod
             this.kryptonButton5.Values.Text = "Add new";
             this.kryptonButton5.Click += new System.EventHandler(this.kryptonButton5_Click);
             // 
-            // kryptonButton3
+            // prevBannerKryptonButton
             // 
-            this.kryptonButton3.Location = new System.Drawing.Point(73, 99);
-            this.kryptonButton3.Name = "kryptonButton3";
-            this.kryptonButton3.Size = new System.Drawing.Size(16, 41);
-            this.kryptonButton3.TabIndex = 39;
-            this.kryptonButton3.Values.Text = "<";
+            this.prevBannerKryptonButton.Location = new System.Drawing.Point(73, 99);
+            this.prevBannerKryptonButton.Name = "prevBannerKryptonButton";
+            this.prevBannerKryptonButton.Size = new System.Drawing.Size(16, 41);
+            this.prevBannerKryptonButton.TabIndex = 39;
+            this.prevBannerKryptonButton.Values.Text = "<";
+            this.prevBannerKryptonButton.Click += new System.EventHandler(this.prevBannerKryptonButton_Click);
             // 
-            // kryptonButton2
+            // nextBannerKryptonButton
             // 
-            this.kryptonButton2.Location = new System.Drawing.Point(304, 99);
-            this.kryptonButton2.Name = "kryptonButton2";
-            this.kryptonButton2.Size = new System.Drawing.Size(16, 41);
-            this.kryptonButton2.TabIndex = 37;
-            this.kryptonButton2.Values.Text = ">";
+            this.nextBannerKryptonButton.Location = new System.Drawing.Point(304, 99);
+            this.nextBannerKryptonButton.Name = "nextBannerKryptonButton";
+            this.nextBannerKryptonButton.Size = new System.Drawing.Size(16, 41);
+            this.nextBannerKryptonButton.TabIndex = 37;
+            this.nextBannerKryptonButton.Values.Text = ">";
+            this.nextBannerKryptonButton.Click += new System.EventHandler(this.nextBannerKryptonButton_Click);
             // 
             // bannersPictureBox
             // 
+            this.bannersPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.bannersPictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.bannersPictureBox.Location = new System.Drawing.Point(85, 56);
             this.bannersPictureBox.Name = "bannersPictureBox";
             this.bannersPictureBox.Size = new System.Drawing.Size(222, 129);
+            this.bannersPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.bannersPictureBox.TabIndex = 38;
             this.bannersPictureBox.TabStop = false;
             // 
@@ -354,6 +375,7 @@ namespace Empire_Earth_Mod
             this.bannersVariantsKryptonComboBox.Name = "bannersVariantsKryptonComboBox";
             this.bannersVariantsKryptonComboBox.Size = new System.Drawing.Size(121, 21);
             this.bannersVariantsKryptonComboBox.TabIndex = 36;
+            this.bannersVariantsKryptonComboBox.SelectedIndexChanged += new System.EventHandler(this.bannersVariantsKryptonComboBox_SelectedIndexChanged);
             // 
             // iconKryptonButton4
             // 
@@ -366,9 +388,11 @@ namespace Empire_Earth_Mod
             // 
             // kryptonLabel6
             // 
-            this.kryptonLabel6.Location = new System.Drawing.Point(83, 52);
+            this.kryptonLabel6.AutoSize = false;
+            this.kryptonLabel6.Location = new System.Drawing.Point(45, 52);
             this.kryptonLabel6.Name = "kryptonLabel6";
-            this.kryptonLabel6.Size = new System.Drawing.Size(34, 20);
+            this.kryptonLabel6.Size = new System.Drawing.Size(100, 20);
+            this.kryptonLabel6.StateCommon.ShortText.TextH = Krypton.Toolkit.PaletteRelativeAlign.Center;
             this.kryptonLabel6.TabIndex = 26;
             this.kryptonLabel6.Values.Text = "Icon";
             // 
@@ -385,6 +409,10 @@ namespace Empire_Earth_Mod
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.kryptonButton1);
+            this.tabPage3.Controls.Add(this.kryptonButton2);
+            this.tabPage3.Controls.Add(this.filesKryptonComboBox);
+            this.tabPage3.Controls.Add(this.kryptonDataGridView1);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
@@ -392,6 +420,81 @@ namespace Empire_Earth_Mod
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "tabPage3";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // kryptonButton1
+            // 
+            this.kryptonButton1.Location = new System.Drawing.Point(372, 16);
+            this.kryptonButton1.Name = "kryptonButton1";
+            this.kryptonButton1.Size = new System.Drawing.Size(24, 20);
+            this.kryptonButton1.TabIndex = 45;
+            this.kryptonButton1.Values.Text = "-";
+            // 
+            // kryptonButton2
+            // 
+            this.kryptonButton2.Location = new System.Drawing.Point(347, 16);
+            this.kryptonButton2.Name = "kryptonButton2";
+            this.kryptonButton2.Size = new System.Drawing.Size(24, 20);
+            this.kryptonButton2.TabIndex = 44;
+            this.kryptonButton2.Values.Text = "+";
+            // 
+            // filesKryptonComboBox
+            // 
+            this.filesKryptonComboBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.filesKryptonComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.filesKryptonComboBox.DropDownWidth = 121;
+            this.filesKryptonComboBox.IntegralHeight = false;
+            this.filesKryptonComboBox.Location = new System.Drawing.Point(220, 15);
+            this.filesKryptonComboBox.Name = "filesKryptonComboBox";
+            this.filesKryptonComboBox.Size = new System.Drawing.Size(121, 21);
+            this.filesKryptonComboBox.TabIndex = 43;
+            this.filesKryptonComboBox.SelectedIndexChanged += new System.EventHandler(this.kryptonComboBox1_SelectedIndexChanged);
+            // 
+            // kryptonDataGridView1
+            // 
+            this.kryptonDataGridView1.AllowUserToAddRows = false;
+            this.kryptonDataGridView1.AllowUserToDeleteRows = false;
+            this.kryptonDataGridView1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.kryptonDataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { this.Info, this.FileName, this.Product, this.Type });
+            this.kryptonDataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+            this.kryptonDataGridView1.GridStyles.Style = Krypton.Toolkit.DataGridViewStyle.Sheet;
+            this.kryptonDataGridView1.GridStyles.StyleBackground = Krypton.Toolkit.PaletteBackStyle.GridBackgroundSheet;
+            this.kryptonDataGridView1.GridStyles.StyleColumn = Krypton.Toolkit.GridStyle.Sheet;
+            this.kryptonDataGridView1.GridStyles.StyleDataCells = Krypton.Toolkit.GridStyle.Sheet;
+            this.kryptonDataGridView1.GridStyles.StyleRow = Krypton.Toolkit.GridStyle.Sheet;
+            this.kryptonDataGridView1.Location = new System.Drawing.Point(12, 42);
+            this.kryptonDataGridView1.MultiSelect = false;
+            this.kryptonDataGridView1.Name = "kryptonDataGridView1";
+            this.kryptonDataGridView1.RowHeadersVisible = false;
+            this.kryptonDataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.kryptonDataGridView1.Size = new System.Drawing.Size(612, 243);
+            this.kryptonDataGridView1.TabIndex = 40;
+            this.kryptonDataGridView1.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.kryptonDataGridView1_CellEnter);
+            // 
+            // Info
+            // 
+            this.Info.HeaderText = "Info";
+            this.Info.Name = "Info";
+            this.Info.ReadOnly = true;
+            this.Info.Width = 50;
+            // 
+            // FileName
+            // 
+            this.FileName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.FileName.HeaderText = "File Name";
+            this.FileName.Name = "FileName";
+            this.FileName.ReadOnly = true;
+            // 
+            // Product
+            // 
+            this.Product.HeaderText = "Product";
+            this.Product.Name = "Product";
+            this.Product.ReadOnly = true;
+            this.Product.Width = 75;
+            // 
+            // Type
+            // 
+            this.Type.HeaderText = "Type";
+            this.Type.Name = "Type";
             // 
             // nextKryptonButton
             // 
@@ -402,12 +505,23 @@ namespace Empire_Earth_Mod
             this.nextKryptonButton.Values.Text = "Next >";
             this.nextKryptonButton.Click += new System.EventHandler(this.kryptonButton1_Click);
             // 
+            // backKryptonButton
+            // 
+            this.backKryptonButton.Location = new System.Drawing.Point(16, 335);
+            this.backKryptonButton.Name = "backKryptonButton";
+            this.backKryptonButton.Size = new System.Drawing.Size(94, 23);
+            this.backKryptonButton.TabIndex = 1;
+            this.backKryptonButton.Values.Text = "< Back";
+            this.backKryptonButton.Visible = false;
+            this.backKryptonButton.Click += new System.EventHandler(this.backKryptonButton_Click);
+            // 
             // ModCreatorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(669, 366);
+            this.Controls.Add(this.backKryptonButton);
             this.Controls.Add(this.nextKryptonButton);
             this.Controls.Add(this.tabControl1);
             this.Location = new System.Drawing.Point(15, 15);
@@ -418,17 +532,33 @@ namespace Empire_Earth_Mod
             this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.variantsKryptonDataGridView1)).EndInit();
             this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.kryptonGroupBox1.Panel)).EndInit();
             this.kryptonGroupBox1.Panel.ResumeLayout(false);
-            this.kryptonGroupBox1.Panel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.kryptonGroupBox1)).EndInit();
             this.kryptonGroupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.bannersPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bannersVariantsKryptonComboBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.iconPictureBox)).EndInit();
+            this.tabPage3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.filesKryptonComboBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.kryptonDataGridView1)).EndInit();
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.DataGridViewImageColumn Info;
+
+        private System.Windows.Forms.DataGridViewTextBoxColumn Product;
+
+        private System.Windows.Forms.DataGridViewTextBoxColumn FileName;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Type;
+
+        private Krypton.Toolkit.KryptonButton kryptonButton1;
+        private Krypton.Toolkit.KryptonButton kryptonButton2;
+
+        private Krypton.Toolkit.KryptonComboBox filesKryptonComboBox;
+        private Krypton.Toolkit.KryptonDataGridView kryptonDataGridView1;
+
+        private Krypton.Toolkit.KryptonButton backKryptonButton;
 
         private Krypton.Toolkit.KryptonLabel kryptonLabel7;
 
@@ -451,8 +581,8 @@ namespace Empire_Earth_Mod
         private Krypton.Toolkit.KryptonButton kryptonButton5;
         private Krypton.Toolkit.KryptonButton kryptonButton6;
 
-        private Krypton.Toolkit.KryptonButton kryptonButton2;
-        private Krypton.Toolkit.KryptonButton kryptonButton3;
+        private Krypton.Toolkit.KryptonButton nextBannerKryptonButton;
+        private Krypton.Toolkit.KryptonButton prevBannerKryptonButton;
         private Krypton.Toolkit.KryptonButton iconKryptonButton4;
 
         private Krypton.Toolkit.KryptonLabel kryptonLabel6;

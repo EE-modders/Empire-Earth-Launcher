@@ -30,10 +30,10 @@ namespace Empire_Earth_Mod_Lib
             [Description("Windows 11")] Eleven = 1100
         }
 
-        [DllImport("kernel32", CharSet = CharSet.Unicode, SetLastError = true)]
-        private static extern IntPtr GetModuleHandle([MarshalAs(UnmanagedType.LPWStr)] in string lpModuleName);
+        [DllImport("kernel32.dll", CharSet=CharSet.Auto, SetLastError=true)]
+        private static extern IntPtr GetModuleHandle(string lpModuleName);
 
-        [DllImport("kernel32", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true)]
+        [DllImport("kernel32.dll", CharSet=CharSet.Auto, ExactSpelling=true, SetLastError=true)]
         private static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
 
         /**
@@ -48,7 +48,7 @@ namespace Empire_Earth_Mod_Lib
             // Based from isWine (https://github.com/zocker-160/isWINE/blob/master/isWINE_dll/isWINE.cpp)
             IntPtr ntPtr = GetModuleHandle("ntdll.dll");
             if (ntPtr != IntPtr.Zero && GetProcAddress(ntPtr, "wine_get_version") != IntPtr.Zero)
-                return WindowsVersionEnum.Wine;
+                return WindowsVersionEnum.Wine; // Not working for some reasons for the moment
 
             OperatingSystem operatingSystem = Environment.OSVersion;
 
@@ -86,10 +86,9 @@ namespace Empire_Earth_Mod_Lib
                                     return WindowsVersionEnum.Seven;
                                 default:
                                 {
-                                    if (operatingSystem.Version.Minor == 2 || operatingSystem.Version.Minor == 3)
+                                    if (operatingSystem.Version.Minor is 2 or 3)
                                         return WindowsVersionEnum.Eight;
-                                    else
-                                        return WindowsVersionEnum.Error;
+                                    return WindowsVersionEnum.Error;
                                 }
                             }
                         case 10:
