@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Threading.Tasks;
 using Empire_Earth_Mod_Lib.Serialization;
 
 namespace Empire_Earth_Mod_Lib
@@ -159,6 +160,15 @@ namespace Empire_Earth_Mod_Lib
                 return modData;
             }
         }
+        
+        /// <summary>
+        /// Return a JSON equivalent of the ModData (without Icon & Banners)
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return JsonSerializer<ModData>.Serialize(this);
+        }
 
         public class Creator
         {
@@ -239,7 +249,7 @@ namespace Empire_Earth_Mod_Lib
                 }
             }
 
-            public void ExportBannersAndIcon()
+            public void ExportBannersAndIcon(Task task = null)
             {
                 ReloadVariantsFolders();
 
@@ -262,11 +272,28 @@ namespace Empire_Earth_Mod_Lib
                 }
             }
 
+            public void ExportModInfos()
+            {
+                File.WriteAllText(Path.Combine(WorkingDir, "data"), ModData.ToString());
+            }
+
+            public void ExportToZip(Task task = null)
+            {
+                using (ZipStorer zipStorer = ZipStorer.Create(Path.Combine(new DirectoryInfo(WorkingDir).Parent.FullName, ModData.Uuid.ToString())))
+                {
+                    zipStorer.AddDirectory(ZipStorer.Compression.Deflate,
+                        WorkingDir, 
+                        string.Empty,
+                        "Created with Launcher v" + Environment.Version.ToString());
+                }
+            }
+
             public void ReloadModFiles(Guid variant)
             {
                 var allFiles = new DirectoryInfo(Path.Combine(WorkingDir, variant.ToString()))
                     .EnumerateFiles("*", SearchOption.AllDirectories);
 
+                // Index new files
                 foreach (var file in allFiles)
                 {
                     string localFilePath = file.FullName.Replace(
@@ -279,6 +306,7 @@ namespace Empire_Earth_Mod_Lib
                         continue;
 
                     bool containsFile = ModData.ModFiles.Any(modFile =>
+                        modFile.Variant == variant &&
                         modFile.RelativeFilePath.Equals(localFilePath, StringComparison.InvariantCultureIgnoreCase));
 
                     if (!containsFile)
@@ -288,6 +316,29 @@ namespace Empire_Earth_Mod_Lib
                             variant, string.Empty));
                     }
                 }
+                
+                
+                // Remove old files
+                foreach (var modFile in ModData.ModFiles.ToArray())
+                {
+                    if (modFile.Variant != variant)
+                        continue;
+                    bool exist = false;
+                    foreach (var file in allFiles)
+                    {
+                        string localFilePath = file.FullName.Replace(Path.Combine(WorkingDir, variant.ToString()), string.Empty);
+                        if (localFilePath.StartsWith(Path.DirectorySeparatorChar.ToString()))
+                            localFilePath = localFilePath.Substring(1);
+                        if (localFilePath.Equals(modFile.RelativeFilePath, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            exist = true;
+                            break;
+                        }
+                    }
+
+                    if (!exist)
+                        ModData.ModFiles.Remove(modFile);
+                }
             }
 
             public void UpdateModFiles(Guid variant, string relativePath, ModFile.ModFileType modFileType)
@@ -296,7 +347,8 @@ namespace Empire_Earth_Mod_Lib
                     modFile => modFile.Variant == variant 
                                && modFile.RelativeFilePath.Equals(relativePath, 
                                    StringComparison.InvariantCultureIgnoreCase));
-                find.FileType = modFileType;
+                if (find != null)
+                    find.FileType = modFileType;
             }
 
             public string GetWorkingDir()

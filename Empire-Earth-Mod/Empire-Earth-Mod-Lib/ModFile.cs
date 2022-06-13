@@ -68,7 +68,7 @@ namespace Empire_Earth_Mod_Lib
                 return ModFileProduct.EEC;
             if (filePath.StartsWith("AOC"))
                 return ModFileProduct.AOC;
-            if (filePath.StartsWith("all"))
+            if (filePath.StartsWith("Both"))
                 return ModFileProduct.Both;
             throw new Exception("Unknown product");
         }

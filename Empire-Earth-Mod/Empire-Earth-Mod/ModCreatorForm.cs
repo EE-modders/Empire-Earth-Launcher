@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Empire_Earth_Mod_Lib;
 using Empire_Earth_Mod_Lib.Serialization;
@@ -64,6 +65,7 @@ namespace Empire_Earth_Mod
                 {
                     _UpdateBannerPreview(Guid.Empty);
                 }
+                backKryptonButton.Visible = true;
             }
 
             if (tabControl1.SelectedIndex == 1)
@@ -76,10 +78,21 @@ namespace Empire_Earth_Mod
 
                 creator.ReloadVariantsFolders();
                 // creator.ExportBannersAndIcon();
+                nextKryptonButton.Text = "Build >";
+            }
+
+            if (tabControl1.SelectedIndex == 2)
+            {
+                nextKryptonButton.Enabled = false;
+                nextKryptonButton.Text = "Building...";
+                backKryptonButton.Visible = false;
+
+                Task.Factory.StartNew(creator.ExportModInfos)
+                    .ContinueWith(creator.ExportBannersAndIcon)
+                    .ContinueWith(creator.ExportToZip);
             }
 
             tabControl1.SelectTab(tabControl1.SelectedTab.TabIndex + 1);
-            backKryptonButton.Visible = true;
 
             Debug.WriteLine("STEP " + tabControl1.SelectedTab.TabIndex);
             Debug.WriteLine(
@@ -90,6 +103,7 @@ namespace Empire_Earth_Mod
         private void backKryptonButton_Click(object sender, EventArgs e)
         {
             tabControl1.SelectTab(tabControl1.SelectedTab.TabIndex - 1);
+            nextKryptonButton.Text = "Next >";
             if (tabControl1.SelectedTab.TabIndex == 0)
                 backKryptonButton.Visible = false;
         }
