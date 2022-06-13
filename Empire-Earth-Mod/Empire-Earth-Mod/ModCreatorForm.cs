@@ -22,9 +22,9 @@ namespace Empire_Earth_Mod
             mod = new ModData();
             creator = new ModData.Creator(mod, "./creator");
 
-            if (kryptonDataGridView1.Columns[3] is DataGridViewComboBoxColumn)
+            if (kryptonDataGridView1.Columns[4] is DataGridViewComboBoxColumn)
             {
-                if (kryptonDataGridView1.Columns[3] is not DataGridViewComboBoxColumn columnAlternative)
+                if (kryptonDataGridView1.Columns[4] is not DataGridViewComboBoxColumn columnAlternative)
                     return;
                 Enum.GetValues(typeof(ModFile.ModFileType)).Cast<ModFile.ModFileType>()
                     .Select(ModFile.GetModFileName).ToList()
@@ -295,28 +295,32 @@ namespace Empire_Earth_Mod
             }
         }
 
-        private void _SaveVariantFilesFromGrid(Guid variantUuid)
+        private void _SaveVariantFilesFromGrid()
         {
             var modFileTypes = new Dictionary<string, ModFile.ModFileType>();
             foreach (DataGridViewRow fileRow in kryptonDataGridView1.Rows)
             {
-                string productPath = ModFile.ParseModFileProduct(ModFile.GetProduct(fileRow.Cells[2].Value.ToString()));
-                string builder = productPath + Path.DirectorySeparatorChar + fileRow.Cells[1].Value;
-                modFileTypes.Add(builder, ModFile.ParseModFileType(fileRow.Cells[3].Value.ToString()));
+                string productPath = ModFile.ParseModFileProduct(ModFile.GetProduct(fileRow.Cells[3].Value.ToString()));
+                string builder = productPath + Path.DirectorySeparatorChar + fileRow.Cells[2].Value;
+                creator.UpdateModFiles(
+                    Guid.Parse(fileRow.Cells[1].Value.ToString()),
+                    builder,
+                    ModFile.ParseModFileType(fileRow.Cells[4].Value.ToString()));
             }
-            creator.UpdateModFiles(variantUuid, modFileTypes);
         }
 
         private void _UpdateVariantFilesPreview(Guid variantUuid)
         {
-            _SaveVariantFilesFromGrid(variantUuid);
+            _SaveVariantFilesFromGrid();
             kryptonDataGridView1.Rows.Clear();
 
             foreach (var modFile in mod.ModFiles.FindAll(modFile => modFile.Variant == variantUuid))
             {
-                kryptonDataGridView1.Rows.Add(null, modFile.RelativeFilePath.Substring(4),
+                kryptonDataGridView1.Rows.Add(null,
+                    variantUuid.ToString(),
+                    modFile.RelativeFilePath.Substring(4),
                     modFile.GetProduct() == ModFile.ModFileProduct.EEC ? "EEC" :
-                    modFile.GetProduct() == ModFile.ModFileProduct.AOC ? "AOC" : "Both",
+                        modFile.GetProduct() == ModFile.ModFileProduct.AOC ? "AOC" : "Both",
                     ModFile.GetModFileName(modFile.FileType));
             }
         }

@@ -290,13 +290,13 @@ namespace Empire_Earth_Mod_Lib
                 }
             }
 
-            public void UpdateModFiles(Guid variant, Dictionary<string, ModFile.ModFileType> modFileTypes)
+            public void UpdateModFiles(Guid variant, string relativePath, ModFile.ModFileType modFileType)
             {
-                foreach (var modFile in ModData.ModFiles.Where(modFile => modFile.Variant == variant))
-                {
-                    if (modFileTypes.ContainsKey(modFile.RelativeFilePath))
-                        modFile.FileType = modFileTypes[modFile.RelativeFilePath];
-                }
+                var find = ModData.ModFiles.Find(
+                    modFile => modFile.Variant == variant 
+                               && modFile.RelativeFilePath.Equals(relativePath, 
+                                   StringComparison.InvariantCultureIgnoreCase));
+                find.FileType = modFileType;
             }
 
             public string GetWorkingDir()

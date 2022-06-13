@@ -68,6 +68,7 @@ namespace Empire_Earth_Mod
             this.filesKryptonComboBox = new Krypton.Toolkit.KryptonComboBox();
             this.kryptonDataGridView1 = new Krypton.Toolkit.KryptonDataGridView();
             this.Info = new System.Windows.Forms.DataGridViewImageColumn();
+            this.Variant = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Product = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Type = new System.Windows.Forms.DataGridViewComboBoxColumn();
@@ -445,7 +446,7 @@ namespace Empire_Earth_Mod
             this.kryptonDataGridView1.AllowUserToAddRows = false;
             this.kryptonDataGridView1.AllowUserToDeleteRows = false;
             this.kryptonDataGridView1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.kryptonDataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { this.Info, this.FileName, this.Product, this.Type });
+            this.kryptonDataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { this.Info, this.Variant, this.FileName, this.Product, this.Type });
             this.kryptonDataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.kryptonDataGridView1.GridStyles.Style = Krypton.Toolkit.DataGridViewStyle.Sheet;
             this.kryptonDataGridView1.GridStyles.StyleBackground = Krypton.Toolkit.PaletteBackStyle.GridBackgroundSheet;
@@ -467,6 +468,14 @@ namespace Empire_Earth_Mod
             this.Info.Name = "Info";
             this.Info.ReadOnly = true;
             this.Info.Width = 50;
+            // 
+            // Variant
+            // 
+            this.Variant.HeaderText = "Variant";
+            this.Variant.Name = "Variant";
+            this.Variant.ReadOnly = true;
+            this.Variant.Visible = false;
+            this.Variant.Width = 5;
             // 
             // FileName
             // 
@@ -535,6 +544,8 @@ namespace Empire_Earth_Mod
             ((System.ComponentModel.ISupportInitialize)(this.kryptonDataGridView1)).EndInit();
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.DataGridViewTextBoxColumn Variant;
 
         private System.Windows.Forms.DataGridViewComboBoxColumn Type;
         private System.Windows.Forms.DataGridViewTextBoxColumn Product;
