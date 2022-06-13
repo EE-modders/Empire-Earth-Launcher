@@ -24,7 +24,9 @@ namespace Empire_Earth_Mod_Lib
         public string Name { get; set; }
         public string Description { get; set; }
         public List<string> Authors { get; set; }
+
         public string Contact { get; set; }
+
         //public List<string> SupportedLanguages { get; set; }
         public Dictionary<Guid, string> Variants { get; set; }
         public List<ModFile> ModFiles { get; set; }
@@ -160,10 +162,9 @@ namespace Empire_Earth_Mod_Lib
 
         public class Creator
         {
-            
             private ModData ModData { get; set; }
             private string WorkingDir { get; set; }
-            
+
             public Creator(ModData mod, string workingDir)
             {
                 ModData = mod;
@@ -241,11 +242,11 @@ namespace Empire_Earth_Mod_Lib
             public void ExportBannersAndIcon()
             {
                 ReloadVariantsFolders();
-                
+
                 // Delete old banners and icon
                 if (File.Exists(Path.Combine(WorkingDir, "Icon.png")))
                     File.Delete(Path.Combine(WorkingDir, "Icon.png"));
-                foreach (var fileInfo in ModData.Variants.SelectMany(variant => 
+                foreach (var fileInfo in ModData.Variants.SelectMany(variant =>
                              new DirectoryInfo(Path.Combine(WorkingDir, variant.Key.ToString())).GetFiles("Banner*")))
                 {
                     fileInfo.Delete();
@@ -265,22 +266,42 @@ namespace Empire_Earth_Mod_Lib
             {
                 var allFiles = new DirectoryInfo(Path.Combine(WorkingDir, variant.ToString()))
                     .EnumerateFiles("*", SearchOption.AllDirectories);
-                
+
                 foreach (var file in allFiles)
                 {
                     string localFilePath = file.FullName.Replace(
                         Path.Combine(WorkingDir, variant.ToString()), string.Empty);
-                    
+                    if (localFilePath.StartsWith(Path.DirectorySeparatorChar.ToString()))
+                        localFilePath = localFilePath.Substring(1);
+
                     // Avoid Banner indexation
-                    if (localFilePath.StartsWith("\\Banner")) 
+                    if (localFilePath.StartsWith("Banner"))
                         continue;
 
                     bool containsFile = ModData.ModFiles.Any(modFile =>
                         modFile.RelativeFilePath.Equals(localFilePath, StringComparison.InvariantCultureIgnoreCase));
-                    
+
                     if (!containsFile)
-                        ModData.ModFiles.Add(new ModFile(localFilePath, ModFile.ModFileType.Data, string.Empty));
+                    {
+                        ModData.ModFiles.Add(new ModFile(localFilePath,
+                            ModFile.GetDefaultModFileType(Path.GetExtension(localFilePath)),
+                            variant, string.Empty));
+                    }
                 }
+            }
+
+            public void UpdateModFiles(Guid variant, Dictionary<string, ModFile.ModFileType> modFileTypes)
+            {
+                foreach (var modFile in ModData.ModFiles.Where(modFile => modFile.Variant == variant))
+                {
+                    if (modFileTypes.ContainsKey(modFile.RelativeFilePath))
+                        modFile.FileType = modFileTypes[modFile.RelativeFilePath];
+                }
+            }
+
+            public string GetWorkingDir()
+            {
+                return WorkingDir;
             }
         }
     }

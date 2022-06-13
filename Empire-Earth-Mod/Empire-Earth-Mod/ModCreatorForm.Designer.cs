@@ -64,8 +64,7 @@ namespace Empire_Earth_Mod
             this.kryptonLabel6 = new Krypton.Toolkit.KryptonLabel();
             this.iconPictureBox = new System.Windows.Forms.PictureBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.kryptonButton1 = new Krypton.Toolkit.KryptonButton();
-            this.kryptonButton2 = new Krypton.Toolkit.KryptonButton();
+            this.updateVariantsFilesKryptonButton = new Krypton.Toolkit.KryptonButton();
             this.filesKryptonComboBox = new Krypton.Toolkit.KryptonComboBox();
             this.kryptonDataGridView1 = new Krypton.Toolkit.KryptonDataGridView();
             this.Info = new System.Windows.Forms.DataGridViewImageColumn();
@@ -409,8 +408,7 @@ namespace Empire_Earth_Mod
             // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.kryptonButton1);
-            this.tabPage3.Controls.Add(this.kryptonButton2);
+            this.tabPage3.Controls.Add(this.updateVariantsFilesKryptonButton);
             this.tabPage3.Controls.Add(this.filesKryptonComboBox);
             this.tabPage3.Controls.Add(this.kryptonDataGridView1);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
@@ -421,21 +419,14 @@ namespace Empire_Earth_Mod
             this.tabPage3.Text = "tabPage3";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // kryptonButton1
+            // updateVariantsFilesKryptonButton
             // 
-            this.kryptonButton1.Location = new System.Drawing.Point(372, 16);
-            this.kryptonButton1.Name = "kryptonButton1";
-            this.kryptonButton1.Size = new System.Drawing.Size(24, 20);
-            this.kryptonButton1.TabIndex = 45;
-            this.kryptonButton1.Values.Text = "-";
-            // 
-            // kryptonButton2
-            // 
-            this.kryptonButton2.Location = new System.Drawing.Point(347, 16);
-            this.kryptonButton2.Name = "kryptonButton2";
-            this.kryptonButton2.Size = new System.Drawing.Size(24, 20);
-            this.kryptonButton2.TabIndex = 44;
-            this.kryptonButton2.Values.Text = "+";
+            this.updateVariantsFilesKryptonButton.Location = new System.Drawing.Point(301, 15);
+            this.updateVariantsFilesKryptonButton.Name = "updateVariantsFilesKryptonButton";
+            this.updateVariantsFilesKryptonButton.Size = new System.Drawing.Size(144, 21);
+            this.updateVariantsFilesKryptonButton.TabIndex = 46;
+            this.updateVariantsFilesKryptonButton.Values.Text = "Update variants files";
+            this.updateVariantsFilesKryptonButton.Click += new System.EventHandler(this.updateVariantsFilesKryptonButton_Click);
             // 
             // filesKryptonComboBox
             // 
@@ -443,11 +434,11 @@ namespace Empire_Earth_Mod
             this.filesKryptonComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.filesKryptonComboBox.DropDownWidth = 121;
             this.filesKryptonComboBox.IntegralHeight = false;
-            this.filesKryptonComboBox.Location = new System.Drawing.Point(220, 15);
+            this.filesKryptonComboBox.Location = new System.Drawing.Point(174, 15);
             this.filesKryptonComboBox.Name = "filesKryptonComboBox";
             this.filesKryptonComboBox.Size = new System.Drawing.Size(121, 21);
-            this.filesKryptonComboBox.TabIndex = 43;
-            this.filesKryptonComboBox.SelectedIndexChanged += new System.EventHandler(this.kryptonComboBox1_SelectedIndexChanged);
+            this.filesKryptonComboBox.TabIndex = 45;
+            this.filesKryptonComboBox.SelectedIndexChanged += new System.EventHandler(this.filesKryptonComboBox_SelectedIndexChanged);
             // 
             // kryptonDataGridView1
             // 
@@ -545,15 +536,12 @@ namespace Empire_Earth_Mod
             this.ResumeLayout(false);
         }
 
+        private System.Windows.Forms.DataGridViewComboBoxColumn Type;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Product;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FileName;
         private System.Windows.Forms.DataGridViewImageColumn Info;
 
-        private System.Windows.Forms.DataGridViewTextBoxColumn Product;
-
-        private System.Windows.Forms.DataGridViewTextBoxColumn FileName;
-        private System.Windows.Forms.DataGridViewComboBoxColumn Type;
-
-        private Krypton.Toolkit.KryptonButton kryptonButton1;
-        private Krypton.Toolkit.KryptonButton kryptonButton2;
+        private Krypton.Toolkit.KryptonButton updateVariantsFilesKryptonButton;
 
         private Krypton.Toolkit.KryptonComboBox filesKryptonComboBox;
         private Krypton.Toolkit.KryptonDataGridView kryptonDataGridView1;
