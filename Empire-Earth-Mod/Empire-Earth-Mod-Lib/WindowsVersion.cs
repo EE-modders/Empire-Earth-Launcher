@@ -7,12 +7,13 @@ namespace Empire_Earth_Mod_Lib
 {
     public static class WindowsVersion
     {
-        /*
-         * Version are using big numbers in case we want to add another version
-         * and still being able to compare with < and > operators.
-         * Because ModData will store the version as number, changing the order will result
-         * in an invalid version or invalid comparison.
-         */
+        
+        /// <summary>
+        /// Version are using big numbers in case we want to add another version
+        /// and still being able to compare with < and > operators.
+        /// Because ModData will store the version as number, changing the order will result
+        /// in an invalid version or invalid comparison.
+        /// </summary>
         public enum WindowsVersionEnum
         {
             [Description("Error")] Error = 0,
@@ -46,9 +47,12 @@ namespace Empire_Earth_Mod_Lib
         public static WindowsVersionEnum GetCurrentWindowsVersion()
         {
             // Based from isWine (https://github.com/zocker-160/isWINE/blob/master/isWINE_dll/isWINE.cpp)
+            // Don't seems to work sadly...
+            /*
             IntPtr ntPtr = GetModuleHandle("ntdll.dll");
             if (ntPtr != IntPtr.Zero && GetProcAddress(ntPtr, "wine_get_version") != IntPtr.Zero)
                 return WindowsVersionEnum.Wine; // Not working for some reasons for the moment
+            */
 
             OperatingSystem operatingSystem = Environment.OSVersion;
 
@@ -86,9 +90,8 @@ namespace Empire_Earth_Mod_Lib
                                     return WindowsVersionEnum.Seven;
                                 default:
                                 {
-                                    if (operatingSystem.Version.Minor is 2 or 3)
-                                        return WindowsVersionEnum.Eight;
-                                    return WindowsVersionEnum.Error;
+                                    return operatingSystem.Version.Minor is 2 or 3 ?
+                                        WindowsVersionEnum.Eight : WindowsVersionEnum.Error;
                                 }
                             }
                         case 10:

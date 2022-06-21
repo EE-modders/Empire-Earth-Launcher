@@ -160,7 +160,7 @@ namespace Empire_Earth_Mod_Lib
                 return modData;
             }
         }
-        
+
         /// <summary>
         /// Return a JSON equivalent of the ModData (without Icon & Banners)
         /// </summary>
@@ -182,11 +182,10 @@ namespace Empire_Earth_Mod_Lib
             }
 
             /// <summary>
-            /// This fonction reload all variants in the specified working directory
-            /// in order to have in the working directory a list of all variants
-            /// UUID and the game base mod directory pre-created
+            /// This function reload all variants in order to have in the
+            /// working directory a list of all variants UUID and the game
+            /// base mod directory pre-created
             /// </summary>
-            /// <param name="workingDir">The mod creator working directory</param>
             public void ReloadVariantsFolders()
             {
                 if (!Directory.Exists(WorkingDir))
@@ -210,12 +209,12 @@ namespace Empire_Earth_Mod_Lib
                 }
 
                 // Create new variants
-                List<string> baseFilesProduct = new List<string>()
+                List<string> baseFilesProduct = new List<string>
                 {
                     "all", "EEC", "AOC"
                 };
 
-                List<string> baseFilesStructure = new List<string>()
+                List<string> baseFilesStructure = new List<string>
                 {
                     "Data",
                     "Data/Campaigns",
@@ -256,14 +255,18 @@ namespace Empire_Earth_Mod_Lib
                 // Delete old banners and icon
                 if (File.Exists(Path.Combine(WorkingDir, "Icon.png")))
                     File.Delete(Path.Combine(WorkingDir, "Icon.png"));
-                foreach (var fileInfo in ModData.Variants.SelectMany(variant =>
-                             new DirectoryInfo(Path.Combine(WorkingDir, variant.Key.ToString())).GetFiles("Banner*")))
+                
+                foreach (var variant in ModData.Variants)
                 {
-                    fileInfo.Delete();
-                }
+                    foreach (var banner in new DirectoryInfo(Path.Combine(WorkingDir, variant.Key.ToString()))
+                                 .GetFiles("Banner*"))
+                    {
+                        banner.Delete();
+                    }
+                };
 
                 // Export banners and icon
-                ModData.Icon?.Save(Path.Combine(WorkingDir, "Icon.png"));
+                ModData.Icon.Save(Path.Combine(WorkingDir, "Icon.png"));
                 foreach (var variant in ModData.Variants.Keys)
                 {
                     for (int i = 0; i != ModData.GetBanners(variant).Count; ++i)
@@ -279,10 +282,15 @@ namespace Empire_Earth_Mod_Lib
 
             public void ExportToZip(Task task = null)
             {
-                using (ZipStorer zipStorer = ZipStorer.Create(Path.Combine(new DirectoryInfo(WorkingDir).Parent.FullName, ModData.Uuid.ToString())))
+                var parentDir = new DirectoryInfo(WorkingDir).Parent;
+                if (parentDir == null)
+                    return;
+                using (ZipStorer zipStorer =
+                       ZipStorer.Create(Path.Combine(parentDir.FullName,
+                           ModData.Uuid.ToString())))
                 {
                     zipStorer.AddDirectory(ZipStorer.Compression.Deflate,
-                        WorkingDir, 
+                        WorkingDir,
                         string.Empty,
                         "Created with Launcher v" + Environment.Version.ToString());
                 }
@@ -291,7 +299,7 @@ namespace Empire_Earth_Mod_Lib
             public void ReloadModFiles(Guid variant)
             {
                 var allFiles = new DirectoryInfo(Path.Combine(WorkingDir, variant.ToString()))
-                    .EnumerateFiles("*", SearchOption.AllDirectories);
+                    .EnumerateFiles("*", SearchOption.AllDirectories).ToList();
 
                 // Index new files
                 foreach (var file in allFiles)
@@ -316,8 +324,8 @@ namespace Empire_Earth_Mod_Lib
                             variant, string.Empty));
                     }
                 }
-                
-                
+
+
                 // Remove old files
                 foreach (var modFile in ModData.ModFiles.ToArray())
                 {
@@ -326,7 +334,8 @@ namespace Empire_Earth_Mod_Lib
                     bool exist = false;
                     foreach (var file in allFiles)
                     {
-                        string localFilePath = file.FullName.Replace(Path.Combine(WorkingDir, variant.ToString()), string.Empty);
+                        string localFilePath =
+                            file.FullName.Replace(Path.Combine(WorkingDir, variant.ToString()), string.Empty);
                         if (localFilePath.StartsWith(Path.DirectorySeparatorChar.ToString()))
                             localFilePath = localFilePath.Substring(1);
                         if (localFilePath.Equals(modFile.RelativeFilePath, StringComparison.InvariantCultureIgnoreCase))
@@ -344,8 +353,8 @@ namespace Empire_Earth_Mod_Lib
             public void UpdateModFiles(Guid variant, string relativePath, ModFile.ModFileType modFileType)
             {
                 var find = ModData.ModFiles.Find(
-                    modFile => modFile.Variant == variant 
-                               && modFile.RelativeFilePath.Equals(relativePath, 
+                    modFile => modFile.Variant == variant
+                               && modFile.RelativeFilePath.Equals(relativePath,
                                    StringComparison.InvariantCultureIgnoreCase));
                 if (find != null)
                     find.FileType = modFileType;

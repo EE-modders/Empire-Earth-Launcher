@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 
 namespace Empire_Earth_Mod_Lib
 {
@@ -26,17 +23,19 @@ namespace Empire_Earth_Mod_Lib
 
         public enum ModFileProduct
         {
+            // ReSharper disable once InconsistentNaming
             EEC = 0,
+            // ReSharper disable once InconsistentNaming
             AOC = 1,
             Both = 2
         }
 
         public ModFile(string relativeFilePath, ModFileType type, Guid uuid, string md5)
         {
-            this.FileType = type;
-            this.Md5 = md5;
-            this.RelativeFilePath = relativeFilePath;
-            this.Variant = uuid;
+            FileType = type;
+            Md5 = md5;
+            RelativeFilePath = relativeFilePath;
+            Variant = uuid;
         }
 
         public static string GetModFileName(ModFileType value)
@@ -59,7 +58,7 @@ namespace Empire_Earth_Mod_Lib
                     typeof(DescriptionAttribute), false), (
                     f, a) => new { Field = f, Att = a }).SingleOrDefault(a => ((DescriptionAttribute)a.Att)
                     .Description == description);
-            return field == null ? default(ModFileType) : (ModFileType)field.Field.GetRawConstantValue();
+            return field == null ? default : (ModFileType)field.Field.GetRawConstantValue();
         }
 
         public static ModFileProduct GetProduct(string filePath)
@@ -104,7 +103,7 @@ namespace Empire_Earth_Mod_Lib
             var fileExtensions = new Dictionary<ModFileType, List<string>>
             {
                 {
-                    ModFileType.Executable, new List<string>()
+                    ModFileType.Executable, new List<string>
                     {
                         ".exe",
                         ".bat",
@@ -112,7 +111,7 @@ namespace Empire_Earth_Mod_Lib
                     }
                 },
                 {
-                    ModFileType.ConfigFile, new List<string>()
+                    ModFileType.ConfigFile, new List<string>
                     {
                         ".json",
                         ".cfg",
@@ -122,13 +121,8 @@ namespace Empire_Earth_Mod_Lib
                     }
                 }
             };
-
-            foreach (var fileType in fileExtensions.Keys)
-            {
-                if (fileExtensions[fileType].Contains(fileExtension))
-                    return fileType;
-            }
-            return ModFileType.Data;
+            
+            return fileExtensions.Keys.FirstOrDefault(fileType => fileExtensions[fileType].Contains(fileExtension));
         }
     }
 }
