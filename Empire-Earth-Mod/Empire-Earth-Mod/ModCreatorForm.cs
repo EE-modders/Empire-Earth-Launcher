@@ -63,7 +63,12 @@ namespace Empire_Earth_Mod
                 }
                 else
                 {
-                    _UpdateBannerPreview(Guid.Empty);
+                    bannersPictureBox.Image = null;
+                    kryptonButton5.Enabled = false;
+                    kryptonButton6.Enabled = false;
+                    prevBannerKryptonButton.Enabled = false;
+                    nextBannerKryptonButton.Enabled = false;
+                    kryptonLabel7.Values.ExtraText = string.Empty;
                 }
                 backKryptonButton.Visible = true;
             }
@@ -76,7 +81,7 @@ namespace Empire_Earth_Mod
                 filesKryptonComboBox.Items.AddRange(
                     mod.Variants.Values.Select(x => x.ToString() as object).ToArray());
 
-                creator.ReloadVariantsFolders();
+                creator.GenerateVariantsFolders();
                 // creator.ExportBannersAndIcon();
                 nextKryptonButton.Text = "Build >";
             }
@@ -278,16 +283,7 @@ namespace Empire_Earth_Mod
 
         private void _UpdateBannerPreview(Guid variantUuid)
         {
-            if (variantUuid == Guid.Empty)
-            {
-                bannersPictureBox.Image = null;
-                kryptonButton5.Enabled = false;
-                kryptonButton6.Enabled = false;
-                prevBannerKryptonButton.Enabled = false;
-                nextBannerKryptonButton.Enabled = false;
-                kryptonLabel7.Values.ExtraText = string.Empty;
-            }
-            else if (!mod.HasBanner(variantUuid))
+            if (!mod.HasBanner(variantUuid))
             {
                 bannersPictureBox.Image = null;
                 kryptonButton5.Enabled = true;

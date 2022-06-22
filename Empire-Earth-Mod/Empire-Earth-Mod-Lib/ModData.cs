@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.IO.Compression;
@@ -53,7 +54,7 @@ namespace Empire_Earth_Mod_Lib
             Banners = new Dictionary<Guid, List<Image>>();
             Authors = new List<string>();
             //SupportedLanguages = new List<string>();
-            Variants = new Dictionary<Guid, string>();
+            Variants = new Dictionary<Guid, string> { { Guid.Empty, "default" } };
             ModFiles = new List<ModFile>();
             RequiredMods = new List<string>();
             IncompatibleMods = new List<string>();
@@ -62,7 +63,11 @@ namespace Empire_Earth_Mod_Lib
 
         public void ClearVariants()
         {
-            Variants.Clear();
+            Variants.ToList().ForEach(variant =>
+            {
+                if (variant.Key != Guid.Empty)
+                    Variants.Remove(variant.Key);
+            });
         }
 
         public void AddOrUpdateVariant(Guid uuid, string name)
@@ -71,6 +76,8 @@ namespace Empire_Earth_Mod_Lib
                 Variants[uuid] = name;
             else
                 Variants.Add(uuid, name);
+            
+            // Create list if it doesn't exist
             if (!Banners.ContainsKey(uuid))
                 Banners.Add(uuid, new List<Image>());
         }
@@ -80,13 +87,14 @@ namespace Empire_Earth_Mod_Lib
         /// </summary>
         /// <param name="uuid">The variant UUID</param>
         /// <returns>true if some related variant data got deleted, false if not</returns>
-        /// <exception cref="DataException">variant don't exist or UUID is empty</exception>
+        /// <exception cref="DataException">variant don't exist or trying to delete default variant</exception>
         public bool RemoveVariant(Guid uuid)
         {
-            bool affected = false;
-            if (uuid == Guid.Empty && !Variants.ContainsKey(uuid))
+            if (!Variants.ContainsKey(uuid))
                 throw new DataException("Variant does not exist");
-            affected = Banners.ContainsKey(uuid);
+            if (uuid == Guid.Empty)
+                throw new DataException("Unable to delete the default variant");
+            bool affected = Banners.ContainsKey(uuid);
             Variants.Remove(uuid);
             Banners.Remove(uuid);
             return affected;
@@ -113,9 +121,11 @@ namespace Empire_Earth_Mod_Lib
         {
             if (!DoesVariantExist(variant))
                 throw new Exception("Variant does not exist");
+            if (!Banners.ContainsKey(variant))
+                Banners.Add(variant, new List<Image>());
             // ReSharper disable once CompareOfFloatsByEqualityOperator
-            if (Math.Round((double.Parse(banner.Width.ToString()) /
-                            double.Parse(banner.Height.ToString())), 2) != 1.78)
+            if (Math.Round(double.Parse(banner.Width.ToString()) /
+                           double.Parse(banner.Height.ToString()), 2) != 1.78)
                 throw new FormatException("Banner must be 16:9");
             if (banner.Width is < 1280 or > 1920 || banner.Height is < 720 or > 1080)
                 throw new FormatException("Banner must be >= 1280x720 and <= 1920x1080");
@@ -140,6 +150,13 @@ namespace Empire_Earth_Mod_Lib
             // So I need some background worker sh$t or idk...
         }
 
+        /// <summary>
+        /// Load a mod from a mod archive
+        /// </summary>
+        /// <param name="eemPath">Path to the mod archive</param>
+        /// <returns>Mod present in the archive</returns>
+        /// <exception cref="Exception">If the archive isn't valid or parse failed</exception>
+        // ReSharper disable once InconsistentNaming
         public static ModData LoadFromEEM(string eemPath)
         {
             using (MemoryStream dataStream = new MemoryStream())
@@ -175,10 +192,20 @@ namespace Empire_Earth_Mod_Lib
             private ModData ModData { get; set; }
             private string WorkingDir { get; set; }
 
-            public Creator(ModData mod, string workingDir)
+            public Creator(ModData mod, string workingDir, bool eraseData = true)
             {
                 ModData = mod;
                 WorkingDir = Path.GetFullPath(workingDir);
+                if (eraseData && Directory.Exists(WorkingDir))
+                    Directory.Delete(WorkingDir, true);
+                if (!Directory.Exists(WorkingDir))
+                    Directory.CreateDirectory(WorkingDir);
+            }
+
+            ~Creator()
+            {
+                if (Directory.Exists(WorkingDir))
+                    Directory.Delete(WorkingDir, true);
             }
 
             /// <summary>
@@ -186,7 +213,7 @@ namespace Empire_Earth_Mod_Lib
             /// working directory a list of all variants UUID and the game
             /// base mod directory pre-created
             /// </summary>
-            public void ReloadVariantsFolders()
+            public void GenerateVariantsFolders()
             {
                 if (!Directory.Exists(WorkingDir))
                     Directory.CreateDirectory(WorkingDir);
@@ -250,7 +277,7 @@ namespace Empire_Earth_Mod_Lib
 
             public void ExportBannersAndIcon(Task task = null)
             {
-                ReloadVariantsFolders();
+                GenerateVariantsFolders();
 
                 // Delete old banners and icon
                 if (File.Exists(Path.Combine(WorkingDir, "Icon.png")))
@@ -263,11 +290,11 @@ namespace Empire_Earth_Mod_Lib
                     {
                         banner.Delete();
                     }
-                };
+                }
 
                 // Export banners and icon
                 ModData.Icon.Save(Path.Combine(WorkingDir, "Icon.png"));
-                foreach (var variant in ModData.Variants.Keys)
+                foreach (var variant in ModData.Variants.Keys.Where(variant => ModData.HasBanner(variant)))
                 {
                     for (int i = 0; i != ModData.GetBanners(variant).Count; ++i)
                         ModData.GetBanners(variant)[i].Save(Path.Combine(WorkingDir,
@@ -285,19 +312,21 @@ namespace Empire_Earth_Mod_Lib
                 var parentDir = new DirectoryInfo(WorkingDir).Parent;
                 if (parentDir == null)
                     return;
-                using (ZipStorer zipStorer =
+                using (ZipStorer zipStore =
                        ZipStorer.Create(Path.Combine(parentDir.FullName,
                            ModData.Uuid.ToString())))
                 {
-                    zipStorer.AddDirectory(ZipStorer.Compression.Deflate,
+                    zipStore.AddDirectory(ZipStorer.Compression.Deflate,
                         WorkingDir,
-                        string.Empty,
-                        "Created with Launcher v" + Environment.Version.ToString());
+                        Path.DirectorySeparatorChar.ToString(),
+                        "Created with Launcher v" + Environment.Version);
                 }
             }
 
             public void ReloadModFiles(Guid variant)
             {
+                GenerateVariantsFolders();
+                
                 var allFiles = new DirectoryInfo(Path.Combine(WorkingDir, variant.ToString()))
                     .EnumerateFiles("*", SearchOption.AllDirectories).ToList();
 
@@ -327,10 +356,8 @@ namespace Empire_Earth_Mod_Lib
 
 
                 // Remove old files
-                foreach (var modFile in ModData.ModFiles.ToArray())
+                foreach (var modFile in ModData.ModFiles.Where(modFile => modFile.Variant == variant))
                 {
-                    if (modFile.Variant != variant)
-                        continue;
                     bool exist = false;
                     foreach (var file in allFiles)
                     {
